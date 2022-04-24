@@ -94,8 +94,6 @@ class Gui(tk.Tk):
         global value
 
         value = self.clicked.get()
-        # Print to check.
-        print(value)
 
         if e == self.opts[1]:
 
@@ -168,16 +166,6 @@ class Gui(tk.Tk):
         var_7 = self.Entry_list[6].get()
         var_8 = self.Entry_list[7].get()
         var_9 = self.Entry_list[8].get()
-        # Print to check.
-        print(var_1)
-        print(var_2)
-        print(var_3)
-        print(var_4)
-        print(var_5)
-        print(var_6)
-        print(var_7)
-        print(var_8)
-        print(var_9)
 
     def _create_figure(self):
         self.sub_frm2 = tk.Frame(self.main_frm, highlightbackground="black",
