@@ -1,8 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.figure import Figure
 
 
-class gui(tk.Tk):
+class Gui(tk.Tk):
     PAD = 80
 
     subPAD = 50
@@ -30,7 +34,9 @@ class gui(tk.Tk):
 
         self._make_sub_frame()
 
-        self._Create_get_Button()
+        self._create_enter_button()
+
+        self._create_figure()
 
     def main(self):
 
@@ -48,7 +54,13 @@ class gui(tk.Tk):
                                 highlightthickness=2, padx=self.subPAD,
                                 pady=self.subPAD)
 
-        self.sub_frm.grid(padx=self.subPAD_out, pady=self.subPAD_out)
+        self.Title = tk.Label(self.sub_frm,
+                              text='Please enter initial values:',
+                              font=('Helvatical bold', 15))
+
+        self.Title.grid(column=0, row=0, padx=5, pady=5)
+
+        self.sub_frm.grid(column=0, row=1, padx=self.subPAD_out, pady=self.subPAD_out)
 
         self.values_to_insert = ['Enter initial condition:', 'Enter initial time:',
                                  'Enter final time:', 'Enter initial position:',
@@ -73,7 +85,7 @@ class gui(tk.Tk):
 
             self.Entry_list.append(self.myEntry)
 
-    def _show_special_Entries_and_save_choice(self, e):
+    def _show_special_entries_and_save_choice(self, e):
         """
         This method builds the unique entries and saves
         the choice from the dropdown list.
@@ -93,7 +105,7 @@ class gui(tk.Tk):
 
             self.Entry_list[-1].grid_forget()
 
-            self._Create_get_Button()
+            self._create_enter_button()
 
         elif e == self.opts[2]:
 
@@ -103,7 +115,7 @@ class gui(tk.Tk):
 
             self.Entry_list[-2].grid_forget()
 
-            self._Create_get_Button()
+            self._create_enter_button()
 
         elif e == self.opts[0]:
 
@@ -111,13 +123,13 @@ class gui(tk.Tk):
 
             self.Entry_list[-1].grid_forget()
 
-    def _Create_get_Button(self):
+    def _create_enter_button(self):
         """
         This method creates the button that saves the entered values.
         """
 
         self.MyButton = tk.Button(self.sub_frm, text='Enter',
-                                  command=self._get_from_Entries)
+                                  command=self._get_from_entries)
 
         self.MyButton.grid(sticky='n', padx=5, pady=5)
 
@@ -125,16 +137,16 @@ class gui(tk.Tk):
         """
         This method creates a dropdown list.
         """
-        oMenuWidth = len(max(self.opts, key=len))
+        o_menu_width = len(max(self.opts, key=len))
 
         self.Drop = tk.OptionMenu(self.main_frm, self.clicked, *self.opts,
-                                  command=self._show_special_Entries_and_save_choice)
+                                  command=self._show_special_entries_and_save_choice)
 
-        self.Drop.config(width=oMenuWidth)
+        self.Drop.config(width=o_menu_width)
 
         self.Drop.grid(column=0, row=0)
 
-    def _get_from_Entries(self):
+    def _get_from_entries(self):
         """
         This method saves the input from the entries.
         """
@@ -167,6 +179,22 @@ class gui(tk.Tk):
         print(var_8)
         print(var_9)
 
+    def _create_figure(self):
+        self.sub_frm2 = tk.Frame(self.main_frm, highlightbackground="black",
+                                 highlightthickness=2, padx=self.subPAD,
+                                 pady=self.subPAD)
+        self.Title = tk.Label(self.sub_frm2,
+                              text='Animation of the solution',
+                              font=('Helvatical bold', 30))
+        self.Title.grid(column=0, row=0)
+
+        self.sub_frm2.grid(column=1, row=1, padx=self.subPAD_out,
+                           pady=self.subPAD_out)
+
+        self.fig = Figure(figsize=(6, 3), dpi=100)
+        self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
+        self.canvas.get_tk_widget().grid()
+        self.canvas.draw()
 
 
 
