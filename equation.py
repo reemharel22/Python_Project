@@ -4,6 +4,7 @@ import scipy
 class Equation:
     def __init__(self):
         pass
+
     def return_results(self):
         pass
 
