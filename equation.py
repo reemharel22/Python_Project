@@ -11,11 +11,14 @@ class Equation:
     def set_boundary_condition(self):
         pass
 
-    def Solver(self):
+    def solve(self):
         while not self.finish_execution():
+            self.update()
             self.set_boundary_condition()
             self.solve_time_step()
 
+    def update(self):
+        pass
 
     def finish_execution(self):
         pass
@@ -26,11 +29,11 @@ class Equation:
 class Diffusion1D(Equation):
     def __init__(self, max_x, nx, dt, alpha):
         # Representation of sparse matrix and right-hand side
-        self.x = np.linspace(0, max_x, nx + 1)  # mesh points in space
+        self.x = np.linspace(0, max_x, nx + 1)  # mesh points in grid
         self.dx = self.x[1] - self.x[0]
         self.dt = dt
         self.F = alpha * self.dt / self.dx ** 2
-        self.u_next = np.zeros(self.nx + 1)  # unknown u at new time level
+        self.u_current = np.zeros(self.nx + 1)  # unknown u at new time level
         self.u_prev = np.zeros(self.nx + 1)
         self.main = np.zeros(self.nx + 1)
         self.lower = np.zeros(self.nx - 1)
