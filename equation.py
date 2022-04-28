@@ -51,11 +51,12 @@ class Diffusion1D(Equation):
     def set_boundary_condition(self):
         self.main[0] = 1
         self.main[self.nx] = 1
+        self.u_prev[0] = self.u_prev[-1] = 0.0
 
     def solve_time_step(self):
         print("TODO")
-        # b = self.u_prev
-        # b[0] = b[-1] = 0.0  # boundary conditions
-        # u[:] = scipy.sparse.linalg.spsolve(A, b)
-        # u_1[:] = u
+        self.b = self.u_prev
+	self.u_current[:] = scipy.sparse.linalg.spsolve(self.A, self.b)
+    def update(self):
+        self.u_prev = self.current
 
