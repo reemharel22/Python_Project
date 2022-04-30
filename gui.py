@@ -5,11 +5,10 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
 
-
 class Gui(tk.Tk):
-    PAD = 80
+    PAD = 30
 
-    subPAD = 50
+    subPAD = 30
 
     subPAD_out = 30
 
@@ -17,6 +16,8 @@ class Gui(tk.Tk):
 
     opts = ['Heat equation', 'Schrodinger equation',
             'One way wave equation']
+
+    visual_opts = ['Image', 'Animation']
 
     def __init__(self, controller):
 
@@ -30,6 +31,10 @@ class Gui(tk.Tk):
 
         self.clicked.set(self.opts[0])
 
+        self.clicked2 = tk.StringVar()
+
+        self.clicked2.set(self.visual_opts[0])
+
         self._make_drop_down_list()
 
         self._make_sub_frame()
@@ -38,34 +43,44 @@ class Gui(tk.Tk):
 
         self._create_figure()
 
+        self._visualiztion_type_drop_down_list()
+
+        self._create_solve_button()
+
     def main(self):
 
         self.mainloop()
 
     def _make_main_frame(self):
+        """
+        This method creates the main frame.
+        """
 
         self.main_frm = ttk.Frame(self)
 
         self.main_frm.grid(padx=self.PAD, pady=self.PAD)
 
     def _make_sub_frame(self):
+        """
+        This method creates a subframe and places Entries inside.
+        """
 
         self.sub_frm = tk.Frame(self.main_frm, highlightbackground="black",
                                 highlightthickness=2, padx=self.subPAD,
                                 pady=self.subPAD)
 
         self.Title = tk.Label(self.sub_frm,
-                              text='Please enter initial values:',
-                              font=('Helvatical bold', 15))
+                              text='Please enter the following values:',
+                              font=('Helvatical bold', 10))
 
         self.Title.grid(column=0, row=0, padx=5, pady=5)
 
-        self.sub_frm.grid(column=0, row=1, padx=self.subPAD_out, pady=self.subPAD_out)
+        self.sub_frm.grid(column=0, row=2, padx=self.subPAD_out, pady=self.subPAD_out)
 
-        self.values_to_insert = ['Enter initial condition:', 'Enter initial time:',
-                                 'Enter final time:', 'Enter initial position:',
-                                 'Enter final position:', 'Enter time step size:',
-                                 'Enter position step size:', 'Enter the potential:',
+        self.values_to_insert = ['Enter initial condition:', 'Enter ti:',
+                                 'Enter tf:', 'Enter xi:', 'Enter boundry value at xi: ',
+                                 'Enter xf:', 'Enter boundry value at xf: ', 'Enter dt:',
+                                 'Enter dx:', 'Enter alpha:', 'Enter the potential:',
                                  'Enter the velocity:']
 
         for i in range(0, len(self.values_to_insert) - 2):
@@ -91,9 +106,7 @@ class Gui(tk.Tk):
         the choice from the dropdown list.
         """
 
-        global value
-
-        value = self.clicked.get()
+        self.value = self.clicked.get()
 
         if e == self.opts[1]:
 
@@ -102,6 +115,8 @@ class Gui(tk.Tk):
             self.Entry_list[-2].grid(padx=5, pady=5)
 
             self.Entry_list[-1].grid_forget()
+
+            self.Entry_list[-3].grid_forget()
 
             self._create_enter_button()
 
@@ -113,13 +128,21 @@ class Gui(tk.Tk):
 
             self.Entry_list[-2].grid_forget()
 
+            self.Entry_list[-3].grid_forget()
+
             self._create_enter_button()
 
         elif e == self.opts[0]:
 
+            self.MyButton.grid_forget()
+
+            self.Entry_list[-3].grid(padx=5, pady=5)
+
             self.Entry_list[-2].grid_forget()
 
             self.Entry_list[-1].grid_forget()
+
+            self._create_enter_button()
 
     def _create_enter_button(self):
         """
@@ -133,56 +156,111 @@ class Gui(tk.Tk):
 
     def _make_drop_down_list(self):
         """
-        This method creates a dropdown list.
+        This method creates a dropdown list to choose the equation type.
         """
-        o_menu_width = len(max(self.opts, key=len))
+
+        self.title3 = tk.Label(self.main_frm,
+                               text='Choose equation: ',
+                               font=('Helvatical bold', 10))
+
+        self.title3.grid(column=0, row=0, padx=5, pady=5)
+
+        oMenuWidth = len(max(self.opts, key=len))
 
         self.Drop = tk.OptionMenu(self.main_frm, self.clicked, *self.opts,
                                   command=self._show_special_entries_and_save_choice)
 
-        self.Drop.config(width=o_menu_width)
+        self.Drop.config(width=oMenuWidth)
 
-        self.Drop.grid(column=0, row=0)
+        self.Drop.grid(column=0, row=1)
 
     def _get_from_entries(self):
         """
         This method saves the input from the entries.
         """
-        global var_1
-        global var_2
-        global var_3
-        global var_4
-        global var_5
-        global var_6
-        global var_7
-        global var_8
-        global var_9
-        var_1 = self.Entry_list[0].get()
-        var_2 = self.Entry_list[1].get()
-        var_3 = self.Entry_list[2].get()
-        var_4 = self.Entry_list[3].get()
-        var_5 = self.Entry_list[4].get()
-        var_6 = self.Entry_list[5].get()
-        var_7 = self.Entry_list[6].get()
-        var_8 = self.Entry_list[7].get()
-        var_9 = self.Entry_list[8].get()
+        self.var_1 = self.Entry_list[0].get()
+
+        self.var_2 = self.Entry_list[1].get()
+
+        self.var_3 = self.Entry_list[2].get()
+
+        self.var_4 = self.Entry_list[3].get()
+
+        self.var_5 = self.Entry_list[4].get()
+
+        self.var_6 = self.Entry_list[5].get()
+
+        self.var_7 = self.Entry_list[6].get()
+
+        self.var_8 = self.Entry_list[7].get()
+
+        self.var_9 = self.Entry_list[8].get()
+
+        if self.value == self.opts[0]:
+
+            self.var_10 = self.Entry_list[9].get()
+
+        elif self.value == self.opts[1]:
+
+            self.var_10 = self.Entry_list[10].get()
+
+        elif self.value == self.opts[2]:
+
+            self.var_10 = self.Entry_list[11].get()
 
     def _create_figure(self):
+        """
+        This method creates a second subframe and places a figure inside it.
+        """
         self.sub_frm2 = tk.Frame(self.main_frm, highlightbackground="black",
                                  highlightthickness=2, padx=self.subPAD,
                                  pady=self.subPAD)
         self.Title = tk.Label(self.sub_frm2,
-                              text='Animation of the solution',
-                              font=('Helvatical bold', 30))
+                              text='Visualization of the solution',
+                              font=('Helvatical bold', 25))
         self.Title.grid(column=0, row=0)
 
-        self.sub_frm2.grid(column=1, row=1, padx=self.subPAD_out,
+        self.sub_frm2.grid(column=1, row=2, padx=self.subPAD_out,
                            pady=self.subPAD_out)
 
         self.fig = Figure(figsize=(6, 3), dpi=100)
         self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
-        self.canvas.get_tk_widget().grid()
+        self.canvas.get_tk_widget().grid(column=0, row=2)
         self.canvas.draw()
+
+    def _visualiztion_type_drop_down_list(self):
+        """
+        This method creates a dropdown list to choose the Visualization type.
+        """
+        oMenuWidth = len(max(self.visual_opts, key=len))
+
+        self.title2 = tk.Label(self.sub_frm2,
+                               text='Choose Visualization type: ',
+                               font=('Helvatical bold', 10))
+
+        self.title2.grid(column=1, row=0)
+
+        self.Drop2 = tk.OptionMenu(self.sub_frm2, self.clicked2, *self.visual_opts,
+                                   command=self._save_choise)
+
+        self.Drop2.config(width=oMenuWidth)
+
+        self.Drop2.grid(column=1, row=1)
+
+    def _save_choise(self, e2):
+
+        self.value2 = self.clicked2.get()
+
+    def _create_solve_button(self):
+        """
+        This method creates the solve button.
+        """
+
+        self.MyButton2 = tk.Button(self.main_frm, text='Solve equation')
+        # command= )
+
+        self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
+                            pady=5)
 
 
 
