@@ -60,34 +60,38 @@ class Gui(tk.Tk):
 
         self.main_frm.grid(padx=self.PAD, pady=self.PAD)
 
+
     def _make_sub_frame(self):
         """
         This method creates a subframe and places Entries inside.
         """
 
         self.sub_frm = tk.Frame(self.main_frm, highlightbackground="black",
-                                highlightthickness=2, padx=self.subPAD,
-                                pady=self.subPAD)
+                                highlightthickness=2, padx=5,#self.subPAD,
+                                pady=5)#self.subPAD)
 
         self.Title = tk.Label(self.sub_frm,
                               text='Please enter the following values:',
                               font=('Helvatical bold', 10))
 
-        self.Title.grid(column=0, row=0, padx=5, pady=5)
+        self.Title.grid(column=0, row=0, pady=5)
 
         self.sub_frm.grid(column=0, row=2, padx=self.subPAD_out, pady=self.subPAD_out)
 
-        self.values_to_insert = ['Enter initial condition:', 'Enter ti:',
-                                 'Enter tf:', 'Enter xi:', 'Enter boundry value at xi: ',
-                                 'Enter xf:', 'Enter boundry value at xf: ', 'Enter dt:',
-                                 'Enter dx:', 'Enter alpha:', 'Enter the potential:',
-                                 'Enter the velocity:']
+        self.values_to_insert = ['initial condition:', 'ti:',
+                                 'final time:', 'x0:', 'boundry value at xi: ',
+                                 'x_max:', 'boundry value at x_max: ', 'dt:',
+                                 'nx:', 'Alpha:', 'potential:',
+                                 'Velocity:']
 
         for i in range(0, len(self.values_to_insert) - 2):
-            self.myEntry = tk.Entry(self.sub_frm, borderwidth=3, width=25)
+            # labels
+            labelDir = tk.Label(self.sub_frm, text=self.values_to_insert[i])
+            labelDir.grid(row=i+1, column=0, padx=0, pady=3, sticky=tk.W)
 
-            self.myEntry.grid(padx=5, pady=5)
-
+            # textbox
+            self.myEntry = tk.Entry(self.sub_frm, borderwidth=1, width=25)
+            self.myEntry.grid(row=i+1, column=1, pady=3)
             self.myEntry.insert(0, self.values_to_insert[i])
 
             self.Entry_list.append(self.myEntry)

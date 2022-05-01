@@ -56,7 +56,8 @@ class Diffusion1D(Equation):
     def solve_time_step(self):
         print("TODO")
         self.b = self.u_prev
-	self.u_current[:] = scipy.sparse.linalg.spsolve(self.A, self.b)
+        self.u_current[:] = scipy.sparse.linalg.spsolve(self.A, self.b)
+
     def update(self):
-        self.u_prev = self.current
+        self.u_prev = self.u_current
 
