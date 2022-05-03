@@ -1,5 +1,11 @@
 import numpy as np
+import scipy.sparse
+import scipy.linalg
 import scipy
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+
 
 class Equation:
     def __init__(self):
@@ -13,9 +19,10 @@ class Equation:
 
     def solve(self):
         while not self.finish_execution():
-            self.update()
             self.set_boundary_condition()
             self.solve_time_step()
+            self.update()
+
 
     def update(self):
         pass
@@ -26,13 +33,18 @@ class Equation:
     def solve_time_step(self):
         pass
 
+
 class Diffusion1D(Equation):
-    def __init__(self, max_x, nx, dt, alpha):
+    def __init__(self, max_x, nx, max_t, nt, alpha, b_val):
         # Representation of sparse matrix and right-hand side
         self.x = np.linspace(0, max_x, nx + 1)  # mesh points in grid
+        self.nx = nx
         self.dx = self.x[1] - self.x[0]
-        self.dt = dt
+        self.t = np.linspace(0, max_t, nt + 1)  # mesh points in grid
+        self.nt = nt
+        self.dt = self.t[1] - self.t[0]
         self.F = alpha * self.dt / self.dx ** 2
+        self.alpha = alpha
         self.u_current = np.zeros(self.nx + 1)  # unknown u at new time level
         self.u_prev = np.zeros(self.nx + 1)
         self.main = np.zeros(self.nx + 1)
@@ -40,24 +52,77 @@ class Diffusion1D(Equation):
         self.upper = np.zeros(self.nx - 1)
         self.b = np.zeros(self.nx + 1)
         self.main[:] = 1 + 2 * self.F
+        self.main[0] = 1
+        self.main[self.nx] = 1
         self.lower[:] = -self.F  # 1
         self.upper[:] = -self.F  # 1
-        self.A = scipy.sparse.diags(
-            diagonals=[self.main, self.lower, self.upper],
-            offsets=[0, -1, 1], shape=(self.nx + 1, self.nx + 1),
-            format='csr')
-        self.A.todense()  # Check that A is correct
+        self.A = np.zeros((self.nx + 1, self.nx + 1))
+
+        for i in range(1, self.nx):
+            self.A[i, i - 1] = -self.F
+            self.A[i, i + 1] = -self.F
+            self.A[i, i] = 1 + 2 * self.F
+        self.A[0, 0] = self.A[self.nx, self.nx] = 1
+        # self.A = scipy.sparse.diags(
+        #     diagonals=[self.main, self.lower, self.upper],
+        #     offsets=[0, -1, 1], shape=(self.nx + 1, self.nx + 1),
+        #     format='csr')
+        # self.A.todense()  # Check that A is correct
+        self.boundary_val = b_val
+        self.cycle = 0
+        self.time_steps = nt
+        self.solutions = np.zeros([nt+1, self.nx + 1])
+        self.u_prev[:] = 0.01
+
+        self.u_prev[0] = b_val# init val
+        self.u_current[:] = self.u_prev[:]
+
+    def finish_execution(self):
+        if self.cycle >= self.nt:
+            return True
+        else:
+            return False
 
     def set_boundary_condition(self):
         self.main[0] = 1
         self.main[self.nx] = 1
-        self.u_prev[0] = self.u_prev[-1] = 0.0
+        # self.u_prev[0] = b_val
+        for i in range(1, self.nx):
+            self.b[i] = -self.u_prev[i]
+        self.b[0] = self.b[self.nx] = 0
 
     def solve_time_step(self):
-        print("TODO")
-        self.b = self.u_prev
-        self.u_current[:] = scipy.sparse.linalg.spsolve(self.A, self.b)
+        for i in range(1, self.nx):
+            self.u_current[i] = self.u_prev[i] + self.F * (self.u_prev[i - 1] - 2 * self.u_prev[i] + self.u_prev[i + 1])
 
     def update(self):
+        self.cycle = self.cycle + 1
+        self.solutions[self.cycle, :] = self.u_current
         self.u_prev = self.u_current
 
+    def plot_animation(self):
+        pause = False
+        fig, ax = plt.subplots()
+        line, = ax.plot(self.x, self.solutions[0, :])
+
+        def animate(i):
+            line.set_ydata(self.solutions[i, :])
+            return line,
+
+        ani = animation.FuncAnimation(
+            fig, animate, blit=True, save_count=50)
+
+        # To save the animation, use e.g.
+        #
+        # ani.save("movie.mp4")
+        #
+        # or
+        #
+        # writer = animation.FFMpegWriter(
+        #     fps=15, metadata=dict(artist='Me'), bitrate=1800)
+        # ani.save("movie.mp4", writer=writer)
+
+        plt.show()
+
+    # def animate(self, i):
+    #     return self.solutions[i, :],

@@ -2,10 +2,11 @@
 
 import numpy as np
 import scipy
+from equation import *
 
 
 class Diffusion2D(Equation):
-    def __init__(max_x, max_y, nx, ny, dt, alpha, up, down, left, right):
+    def __init__(self, max_x, max_y, nx, ny, dt, alpha, up, down, left, right):
         self.x = np.linspace(0, max_x, nx + 1)  # mesh points in space
         self.y = np.linspace(0, max_y, ny + 1)  # mesh points in space
         self.dx = self.x[1] - self.x[0]
@@ -14,8 +15,6 @@ class Diffusion2D(Equation):
         self.ny = ny
         self.dt = dt
         self.gamma = (alpha * self.dt) / (self.dx * self.dy)
-	# initialize the array
-        self.u_prev = np.empty((max_x, max_y))
         self.u_current = np.empty((max_x, max_y))
         self.u_prev = 0
         self.u_current = 0
@@ -29,21 +28,19 @@ class Diffusion2D(Equation):
         pass
 
     def set_boundary_condition(self):
-      	self.u_current[self.nx-1:, :] = self.up
-      	self.u_current[:1, 1:] = self.down
-      	self.u_current[:, :1] = self.left
-      	self.u_current[:, self.ny-1:] = self.right
+        self.u_current[self.nx-1:, :] = self.up
+        self.u_current[:1, 1:] = self.down
+        self.u_current[:, :1] = self.left
+        self.u_current[:, self.ny-1:] = self.right
 
-      	self.u_prev[self.nx-1:, :] = self.up
-      	self.u_prev[:1, 1:] = self.down
-      	self.u_prev[:, :1] = self.left
-      	self.u_prev[:, self.ny-1:] = self.right
+        self.u_prev[self.nx-1:, :] = self.up
+        self.u_prev[:1, 1:] = self.down
+        self.u_prev[:, :1] = self.left
+        self.u_prev[:, self.ny-1:] = self.right
         pass
-
 
     def finish_execution(self):
         pass
-
 
 # Solves the diffusion 2d heat for a box! - for a cylinder it won't owrk... given a boundary condition of values..
     def solve_time_step(self):
