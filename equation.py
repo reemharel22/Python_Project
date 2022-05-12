@@ -35,7 +35,7 @@ class Equation:
 
 
 class Diffusion1D(Equation):
-    def __init__(self, max_x, nx, max_t, nt, alpha, b_val):
+    def __init__(self, max_x, nx, max_t, nt, alpha, b_val, init_val):
         # Representation of sparse matrix and right-hand side
         self.x = np.linspace(0, max_x, nx + 1)  # mesh points in grid
         self.nx = nx
@@ -72,7 +72,7 @@ class Diffusion1D(Equation):
         self.cycle = 0
         self.time_steps = nt
         self.solutions = np.zeros([nt+1, self.nx + 1])
-        self.u_prev[:] = 0.01
+        self.u_prev[:] = init_val
 
         self.u_prev[0] = b_val# init val
         self.u_current[:] = self.u_prev[:]
@@ -100,29 +100,28 @@ class Diffusion1D(Equation):
         self.solutions[self.cycle, :] = self.u_current
         self.u_prev = self.u_current
 
-    def plot_animation(self):
+    def plot_animation(self, fig):
         pause = False
-        fig, ax = plt.subplots()
+        ax = fig.add_subplot(111)
         line, = ax.plot(self.x, self.solutions[0, :])
+        plt.xlim([0, self.x[-1]])
+        plt.ylim([0, np.max(self.solutions)])
 
         def animate(i):
+            if i > len(self.solutions):
+                return line,
             line.set_ydata(self.solutions[i, :])
             return line,
 
         ani = animation.FuncAnimation(
-            fig, animate, blit=True, save_count=50)
+            fig, animate, blit=True, frames=200, save_count=50)
 
-        # To save the animation, use e.g.
-        #
-        # ani.save("movie.mp4")
-        #
-        # or
-        #
-        # writer = animation.FFMpegWriter(
-        #     fps=15, metadata=dict(artist='Me'), bitrate=1800)
-        # ani.save("movie.mp4", writer=writer)
+        # fig.show()
 
-        plt.show()
+    def plot_image(self, fig, step):
+        pause = False
+        ax = fig.subplots()
+        line, = ax.plot(self.x, self.solutions[step, :])
+        plt.xlim([0, self.x[-1]])
+        plt.ylim([0, np.max(self.solutions[step, :])])
 
-    # def animate(self, i):
-    #     return self.solutions[i, :],
