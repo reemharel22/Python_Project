@@ -33,6 +33,11 @@ class Equation:
     def solve_time_step(self):
         pass
 
+    def start_plot(self, fig):
+        pass
+
+    def plot_step(self, step):
+        pass
 
 class Diffusion1D(Equation):
     def __init__(self, max_x, nx, max_t, nt, alpha, b_val, init_val):
@@ -73,7 +78,7 @@ class Diffusion1D(Equation):
         self.time_steps = nt
         self.solutions = np.zeros([nt+1, self.nx + 1])
         self.u_prev[:] = init_val
-
+        self.step = 1
         self.u_prev[0] = b_val# init val
         self.u_current[:] = self.u_prev[:]
 
@@ -118,10 +123,23 @@ class Diffusion1D(Equation):
 
         # fig.show()
 
-    def plot_image(self, fig, step):
+    def start_plot(self, fig):
+        self.step = 1
         pause = False
         ax = fig.subplots()
-        line, = ax.plot(self.x, self.solutions[step, :])
+        self.line, = ax.plot(self.x, self.solutions[1, :])
         plt.xlim([0, self.x[-1]])
-        plt.ylim([0, np.max(self.solutions[step, :])])
+        plt.ylim([0, np.max(self.solutions[:, :])])
+
+    def plot_step(self, i):
+        self.step = self.step + i
+        if self.step > len(self.solutions):
+            self.step = 1
+            return False
+        if self.step < 1:
+            self.step = 1
+            return False
+        self.line.set_ydata(self.solutions[self.step, :])
+
+
 

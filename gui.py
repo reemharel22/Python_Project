@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
@@ -49,13 +51,18 @@ class Gui(tk.Tk):
 
         self._create_figure()
 
-        self._visualiztion_type_drop_down_list()
+        # self._visualiztion_type_drop_down_list()
 
         self._create_solve_button()
+
+        self._create_buttons_of_figure()
 
     def main(self):
 
         self.mainloop()
+
+    def _error_message(self, message):
+        messagebox.showerror("Error", message)
 
     def _make_main_frame(self):
         """
@@ -238,6 +245,70 @@ class Gui(tk.Tk):
 
             self.var_10 = self.Entry_list[11].get()
 
+    def _create_solve_button(self):
+        """
+        This method creates the solve button.
+        """
+
+        self.MyButton2 = tk.Button(self.main_frm, text='Start Plotting!',
+        command=self._animate_equation)
+
+        self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
+                            pady=5)
+
+########################################################## PLOT #####################################################
+    def _create_buttons_of_figure(self):
+        """
+        This method creates the solve button.
+        """
+        self.step = 0
+
+        self.MyButton2 = tk.Button(self.sub_frm2, text='Next plot',
+        command=self._command_next_plot)
+        self.MyButton2.grid(column=1, row=2, sticky='n', padx=5,
+                            pady=5)
+
+        self.MyButton2 = tk.Button(self.sub_frm2, text='Previous plot',
+        command=self._command_prev_plot)
+        self.MyButton2.grid(column=3, row=2, sticky='n', padx=5,
+                            pady=5)
+
+        self.MyButton2 = tk.Button(self.sub_frm2, text='Animate',
+                                   command=self._command_animate_plot)
+        self.MyButton2.grid(column=1, row=2, sticky='n', padx=5,
+                            pady=50)
+
+        self.MyButton2 = tk.Button(self.sub_frm2, text='Stop',
+                                   command=self._command_animate_plot)
+        self.MyButton2.grid(column=3, row=2, sticky='n', padx=5,
+                            pady=50)
+
+    def _command_next_plot(self):
+        try:
+            if self.eq.plot_step(1):
+                self._error_message("No next plot found. Reset to initial plot")
+            else:
+                self.fig.canvas.draw()
+        except:
+            self._error_message("Are you sure you clicked solve and started plotting?")
+
+    def _command_prev_plot(self):
+        try:
+            if self.eq.plot_step(-1):
+                self._error_message("No previous plot found. Reset to initial plot")
+            else:
+                self.fig.canvas.draw()
+        except:
+            self._error_message("Are you sure you clicked solve and started plotting?")
+
+    def _command_animate_plot(self):
+        step = self.step - 1
+        # try:
+        #     # while self.fig
+        # except:
+        #     self._error_message("No previous plot found")
+        # pass
+
     def _create_figure(self):
         """
         This method creates a second subframe and places a figure inside it.
@@ -256,7 +327,6 @@ class Gui(tk.Tk):
         self.fig = plt.Figure(figsize=(6, 3), dpi=100)
         self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
         self.canvas.get_tk_widget().grid(column=0, row=2)
-
 
     def _visualiztion_type_drop_down_list(self):
         """
@@ -282,27 +352,13 @@ class Gui(tk.Tk):
         self.type_visualization = self.clicked2.get()
 
     def _animate_equation(self):
-        print("Visual option:", self.type_visualization)
-        if self.type_visualization == self.visual_opts[0]:
-            self.eq.plot_image(self.fig, 1)
-        elif self.type_visualization == self.visual_opts[1]:
-            self.canvas.draw()
+        # print("Visual option:", self.type_visualization)
+        # if self.type_visualization == self.visual_opts[0]: # image to plot
+        self.eq.start_plot(self.fig)
+        # elif self.type_visualization == self.visual_opts[1]:
+        #     self.canvas.draw()
 
-            self.eq.plot_animation(self.fig)
+            # self.eq.plot_animation(self.fig)
         self.canvas.draw()
-
-    def _create_solve_button(self):
-        """
-        This method creates the solve button.
-        """
-
-        self.MyButton2 = tk.Button(self.main_frm, text='Start Plotting!',
-        command=self._animate_equation)
-
-        self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
-                            pady=5)
-
-
-
 
 
