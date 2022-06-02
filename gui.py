@@ -9,13 +9,14 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.figure import Figure
 import default
 import equation
+import plot_gui
 
 class Gui(tk.Tk):
     PAD = 30
 
-    subPAD = 30
-
-    subPAD_out = 30
+    # subPAD = 30
+    #
+    # subPAD_out = 30
 
     Entry_list = []
 
@@ -70,13 +71,15 @@ class Gui(tk.Tk):
 
         self._create_enter_button()
 
-        self._create_figure()
+        self.plot_gui = plot_gui.PlotBox(self.main_frm)
+        # self.plot_gui.create_figure()
+        # self._create_figure()
 
         # self._visualiztion_type_drop_down_list()
 
-        self._create_solve_button()
+        # self._create_solve_button()
 
-        self._create_buttons_of_figure()
+        # self._create_buttons_of_figure()
 
         self._create_initial_func_drop_down_list()
 
@@ -113,7 +116,7 @@ class Gui(tk.Tk):
 
         self.Title.grid(column=0, row=0, pady=5)
 
-        self.sub_frm.grid(column=0, row=2, padx=self.subPAD_out, pady=self.subPAD_out)
+        self.sub_frm.grid(column=0, row=2, padx=default.subPAD_out, pady=default.subPAD_out)
 
         self.values_to_insert = ['Initial condition:',
                                  'Number of Cells (nx):',
@@ -312,6 +315,7 @@ class Gui(tk.Tk):
             b_val = float(self.Entry_label_dict["Boundry value at x0:"].get())
             init_val = float(self.Entry_label_dict["Initial condition:"].get())
             self.eq = equation.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
+            self.plot_gui.set_equation(self.eq)
             self.eq.solve()
             print("Done solving (should be as a message popup")
 
@@ -334,78 +338,6 @@ class Gui(tk.Tk):
         self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
                             pady=5)
 
-########################################################## PLOT #####################################################
-    def _create_buttons_of_figure(self):
-        """
-        This method creates the solve button.
-        """
-        self.step = 0
-
-        self.MyButton2 = tk.Button(self.sub_frm2, text='Next plot',
-        command=self._command_next_plot)
-        self.MyButton2.grid(column=1, row=2, sticky='n', padx=5,
-                            pady=5)
-
-        self.MyButton2 = tk.Button(self.sub_frm2, text='Previous plot',
-        command=self._command_prev_plot)
-        self.MyButton2.grid(column=3, row=2, sticky='n', padx=5,
-                            pady=5)
-
-        self.MyButton2 = tk.Button(self.sub_frm2, text='Animate',
-                                   command=self._command_animate_plot)
-        self.MyButton2.grid(column=1, row=2, sticky='n', padx=5,
-                            pady=50)
-
-        self.MyButton2 = tk.Button(self.sub_frm2, text='Stop',
-                                   command=self._command_animate_plot)
-        self.MyButton2.grid(column=3, row=2, sticky='n', padx=5,
-                            pady=50)
-
-    def _command_next_plot(self):
-        try:
-            if self.eq.plot_step(1):
-                self._error_message("No next plot found. Reset to initial plot")
-            else:
-                self.fig.canvas.draw()
-        except:
-            self._error_message("Are you sure you clicked solve and started plotting?")
-
-    def _command_prev_plot(self):
-        try:
-            if self.eq.plot_step(-1):
-                self._error_message("No previous plot found. Reset to initial plot")
-            else:
-                self.fig.canvas.draw()
-        except:
-            self._error_message("Are you sure you clicked solve and started plotting?")
-
-    def _command_animate_plot(self):
-        step = self.step - 1
-        # try:
-        #     # while self.fig
-        # except:
-        #     self._error_message("No previous plot found")
-        pass
-
-    def _create_figure(self):
-        """
-        This method creates a second subframe and places a figure inside it.
-        """
-        self.sub_frm2 = tk.Frame(self.main_frm, highlightbackground="black",
-                                 highlightthickness=2, padx=self.subPAD,
-                                 pady=self.subPAD)
-        self.Title = tk.Label(self.sub_frm2,
-                              text='Visualization of the solution',
-                              font=('Helvatical bold', 25))
-        self.Title.grid(column=0, row=0)
-
-        self.sub_frm2.grid(column=1, row=2, padx=self.subPAD_out,
-                           pady=self.subPAD_out)
-
-        self.fig = Figure(figsize=(6, 3), dpi=100)
-        self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
-        self.canvas.get_tk_widget().grid(column=0, row=2)
-
     def _visualiztion_type_drop_down_list(self):
         """
         This method creates a dropdown list to choose the Visualization type.
@@ -426,18 +358,9 @@ class Gui(tk.Tk):
         self.Drop2.grid(column=1, row=1)
 
     def _save_choise(self, e2):
-
         self.type_visualization = self.clicked2.get()
 
-    def _animate_equation(self):
-        # print("Visual option:", self.type_visualization)
-        # if self.type_visualization == self.visual_opts[0]: # image to plot
-        self.eq.start_plot(self.fig)
-        # elif self.type_visualization == self.visual_opts[1]:
-        #     self.canvas.draw()
 
-            # self.eq.plot_animation(self.fig)
-        self.canvas.draw()
 
     def _create_initial_func_drop_down_list(self):
 
@@ -454,7 +377,7 @@ class Gui(tk.Tk):
 
         self.drop3.config(width=oMenuWidth1)
 
-    def _get_from_initial_func_drop_down_list(self,e3):
+    def _get_from_initial_func_drop_down_list(self, e3):
 
         self.value2 = self.clicked3.get()
 
@@ -476,7 +399,7 @@ class Gui(tk.Tk):
 
                 self.Entry_list_Sin_Sinc.clear()
 
-                elf.Label_list_Sin_Sinc.clear()
+                self.Label_list_Sin_Sinc.clear()
 
             if len(self.Entry_list_Gaussian) != 0:
 

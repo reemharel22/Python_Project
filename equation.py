@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 
-
 class Equation:
     def __init__(self):
         pass

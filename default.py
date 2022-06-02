@@ -8,6 +8,9 @@ Diffusion_default = {
 'Alpha:': 0.01
 }
 
+subPAD = 30
+subPAD_out = 30
+
 # diff_max_x = 1.5
 # diff_nx = 50
 # diff_max_t = 2
