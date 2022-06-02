@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 
 import matplotlib.pyplot as plt
+
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
@@ -307,7 +308,7 @@ class Gui(tk.Tk):
         #     # while self.fig
         # except:
         #     self._error_message("No previous plot found")
-        # pass
+        pass
 
     def _create_figure(self):
         """
@@ -324,7 +325,7 @@ class Gui(tk.Tk):
         self.sub_frm2.grid(column=1, row=2, padx=self.subPAD_out,
                            pady=self.subPAD_out)
 
-        self.fig = plt.Figure(figsize=(6, 3), dpi=100)
+        self.fig = Figure(figsize=(6, 3), dpi=100)
         self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
         self.canvas.get_tk_widget().grid(column=0, row=2)
 
