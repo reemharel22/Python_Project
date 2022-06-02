@@ -10,7 +10,6 @@ from matplotlib.figure import Figure
 import default
 import equation
 
-
 class Gui(tk.Tk):
     PAD = 30
 
@@ -19,14 +18,35 @@ class Gui(tk.Tk):
     subPAD_out = 30
 
     Entry_list = []
+
+    Label_list = []
+
+    Entry_list_Gaussian = []
+
+    Label_list_Gaussian = []
+
+    Entry_list_Sin_Sinc = []
+
+    Label_list_Sin_Sinc = []
+
+    values_to_insert_Gaussian = ['Amplitude:',
+                                      'Sigma:',
+                                      'Mu:']
+
+    values_to_insert_sin_sinc = ['Amplitude:',
+                                      'Phase:',
+                                      'Wave vector:']
+
     Entry_label_dict = []
+
+    Special_Entry_List = []
 
     opts = ['Heat equation', 'Schrodinger equation',
             'One way wave equation']
 
     visual_opts = ['Image', 'Animation']
 
-
+    Initial_func = ['Gaussian', 'Sinc wave', 'Sine wave']
 
     def __init__(self, controller):
 
@@ -57,6 +77,8 @@ class Gui(tk.Tk):
         self._create_solve_button()
 
         self._create_buttons_of_figure()
+
+        self._create_initial_func_drop_down_list()
 
     def main(self):
 
@@ -100,28 +122,28 @@ class Gui(tk.Tk):
                                  'Number cycles:',
                                  'Final time:',
                                  'Alpha:',
-                                 'Potential:',
                                  'Velocity:']
 
-        for i in range(0, len(self.values_to_insert) - 2):
+        for i in range(0, len(self.values_to_insert) - 1):
             # labels
-            labelDir = tk.Label(self.sub_frm, text=self.values_to_insert[i])
-            labelDir.grid(row=i+1, column=0, padx=0, pady=3, sticky=tk.W)
+            self.labelDir = tk.Label(self.sub_frm, text=self.values_to_insert[i])
+            self.labelDir.grid(row=i+1, column=0, padx=0, pady=3, sticky=tk.W)
+            self.Label_list.append(self.labelDir)
 
             # textbox
             self.myEntry = tk.Entry(self.sub_frm, borderwidth=1, width=25)
             self.myEntry.grid(row=i+1, column=1, pady=3)
             self.myEntry.insert(0, default.Diffusion_default[self.values_to_insert[i]])
-
             self.Entry_list.append(self.myEntry)
 
-        for j in range(0, 2):
-            self.myEntry = tk.Entry(self.sub_frm, borderwidth=3, width=25)
+        self.myEntry = tk.Entry(self.sub_frm, borderwidth=3, width=25)
+        self.labelDir = tk.Label(self.sub_frm,
+                                 text=self.values_to_insert[-1])
+        self.Label_list.append(self.labelDir)
 
-            self.myEntry.insert(0, self.values_to_insert
-            [len(self.values_to_insert) - 2 + j])
+        self.myEntry.insert(0, self.values_to_insert[-1])
 
-            self.Entry_list.append(self.myEntry)
+        self.Entry_list.append(self.myEntry)
 
         self.Entry_label_dict = dict(zip(self.values_to_insert, self.Entry_list))
 
@@ -137,11 +159,25 @@ class Gui(tk.Tk):
 
             self.MyButton.grid_forget()
 
-            self.Entry_list[-2].grid(padx=5, pady=5)
+            if self.Entry_list[-1].winfo_ismapped():
 
-            self.Entry_list[-1].grid_forget()
+                self.Entry_list[-1].grid_forget()
 
-            self.Entry_list[-3].grid_forget()
+            if self.Label_list[-1].winfo_ismapped():
+
+                self.Label_list[-1].grid_forget()
+
+            if self.Entry_list[-2].winfo_ismapped():
+
+                self.Entry_list[-2].grid_forget()
+
+            if self.Label_list[-2].winfo_ismapped():
+
+                self.Label_list[-2].grid_forget()
+
+            self.drop3.grid(column=1, row=9)
+
+            self.title4.grid(column=0, row=9, padx=0, pady=3, sticky=tk.W)
 
             self._create_enter_button()
 
@@ -149,23 +185,67 @@ class Gui(tk.Tk):
 
             self.MyButton.grid_forget()
 
-            self.Entry_list[-1].grid(padx=5, pady=5)
+            self.Label_list[-1].grid(row=8,column=0, padx=0, pady=3, sticky=tk.W)
 
-            self.Entry_list[-2].grid_forget()
+            self.Entry_list[-1].grid(row=8,column=1, padx=5, pady=5)
 
-            self.Entry_list[-3].grid_forget()
+            if self.Entry_list[-2].winfo_ismapped():
+
+                self.Entry_list[-2].grid_forget()
+
+            if self.Label_list[-2].winfo_ismapped():
+
+                self.Label_list[-2].grid_forget()
+
+            self.drop3.grid(column=1, row=9)
+
+            self.title4.grid(column=0, row=9, padx=0, pady=3, sticky=tk.W)
 
             self._create_enter_button()
 
         elif e == self.opts[0]:
 
+            print(len(self.Entry_list_Gaussian))
+
+            print(len(self.Entry_list_Sin_Sinc))
+
+            print(len(self.Label_list_Sin_Sinc))
+
+            print(len(self.Label_list_Gaussian))
+
+            if len(self.Entry_list_Sin_Sinc) != 0:
+
+                for i in range(0, 3):
+
+                    self.Entry_list_Sin_Sinc[i].grid_forget()
+
+                    self.Label_list_Sin_Sinc[i].grid_forget()
+
+            if len(self.Entry_list_Gaussian) != 0:
+
+               for i in range(0, 3):
+
+                    self.Label_list_Gaussian[i].grid_forget()
+
+                    self.Entry_list_Gaussian[i].grid_forget()
+
+            self.drop3.grid_forget()
+
+            self.title4.grid_forget()
+
             self.MyButton.grid_forget()
 
-            self.Entry_list[-3].grid(padx=5, pady=5)
+            self.Label_list[-2].grid(row=8, column=0, padx=0, pady=3, sticky=tk.W)
 
-            self.Entry_list[-2].grid_forget()
+            self.Entry_list[-2].grid(row=8, column=1, padx=5, pady=5)
 
-            self.Entry_list[-1].grid_forget()
+            if self.Entry_list[-1].winfo_ismapped():
+
+                self.Entry_list[-1].grid_forget()
+
+            if self.Label_list[-1].winfo_ismapped():
+
+                self.Label_list[-1].grid_forget()
 
             self._create_enter_button()
 
@@ -219,9 +299,6 @@ class Gui(tk.Tk):
 
             self.var_7 = self.Entry_list[6].get()
 
-            self.var_8 = self.Entry_list[7].get()
-
-            self.var_9 = self.Entry_list[8].get()
         except:
             print("Error in input! Please create an error button")
             return
@@ -238,13 +315,13 @@ class Gui(tk.Tk):
             self.eq.solve()
             print("Done solving (should be as a message popup")
 
-        elif self.value == self.opts[1]:
+        #elif self.value == self.opts[1]:
 
-            self.var_10 = self.Entry_list[10].get()
+        #    self.var_10 = self.Entry_list[10].get()
 
         elif self.value == self.opts[2]:
 
-            self.var_10 = self.Entry_list[11].get()
+            self.var_8 = self.Entry_list[7].get()
 
     def _create_solve_button(self):
         """
@@ -361,5 +438,116 @@ class Gui(tk.Tk):
 
             # self.eq.plot_animation(self.fig)
         self.canvas.draw()
+
+    def _create_initial_func_drop_down_list(self):
+
+        oMenuWidth1 = len(max(self.Initial_func, key=len))
+
+        self.title4 = tk.Label(self.sub_frm,
+                               text='Choose initial condition form: ',
+                               font=('Helvatical bold', 10))
+
+        self.clicked3 = tk.StringVar()
+
+        self.drop3 = tk.OptionMenu(self.sub_frm, self.clicked3, *self.Initial_func,
+        command = self._get_from_initial_func_drop_down_list)
+
+        self.drop3.config(width=oMenuWidth1)
+
+    def _get_from_initial_func_drop_down_list(self,e3):
+
+        self.value2 = self.clicked3.get()
+
+        if self.value2 == 'Gaussian':
+
+            self.MyButton.grid_forget()
+
+            self.Entry_list_Sin_Sinc.clear()
+
+            self.Label_list_Sin_Sinc.clear()
+
+            if len(self.Entry_list_Sin_Sinc) != 0:
+
+                for i in range(0, 3):
+
+                    self.Entry_list_Sin_Sinc[i].grid_forget()
+
+                    self.Label_list_Sin_Sinc[i].grid_forget()
+
+                self.Entry_list_Sin_Sinc.clear()
+
+                elf.Label_list_Sin_Sinc.clear()
+
+            if len(self.Entry_list_Gaussian) != 0:
+
+                for i in range(0, 3):
+
+                    self.Entry_list_Gaussian[i].grid_forget()
+
+                    self.Label_list_Gaussian[i].grid_forget()
+
+                self.Entry_list_Gaussian.clear()
+
+                self.Label_list_Gaussian.clear()
+
+            for i in range(0, 3):
+
+                # labels
+                self.labelDir_Gaussian = tk.Label(self.sub_frm, text=self.values_to_insert_Gaussian[i])
+                self.labelDir_Gaussian.grid(row = 10 + i, column=0, padx=0, pady=3, sticky=tk.W)
+                self.Label_list_Gaussian.append(self.labelDir)
+
+                # textbox
+                self.myEntryGaussian = tk.Entry(self.sub_frm, borderwidth=1, width=25)
+                self.myEntryGaussian.grid(row = 10 + i, column=1, pady=3)
+                self.Entry_list_Gaussian.append(self.myEntryGaussian)
+
+            self._create_enter_button()
+
+        elif self.value2 == 'Sinc wave' or self.value2 == 'Sine wave':
+
+            self.MyButton.grid_forget()
+
+            if len(self.Entry_list_Gaussian) != 0:
+
+                for i in range(0, len(self.values_to_insert_Gaussian)):
+
+                    self.Entry_list_Gaussian[i].grid_forget()
+
+                    self.Label_list_Gaussian[i].grid_forget()
+
+                self.Entry_list_Gaussian.clear()
+
+                self.Label_list_Gaussian.clear()
+
+            if len(self.Entry_list_Sin_Sinc) != 0:
+
+                for i in range(0, 3):
+
+                     self.Entry_list_Sin_Sinc[i].grid_forget()
+
+                     self.Label_list_Sin_Sinc[i].grid_forget()
+
+                self.Entry_list_Sin_Sinc.clear()
+
+                self.Label_list_Sin_Sinc.clear()
+
+            for i in range(0, 3):
+                # labels
+                self.labelDir_Sin_Sinc = tk.Label(self.sub_frm, text=self.values_to_insert_sin_sinc[i])
+                self.labelDir_Sin_Sinc.grid(row=10 + i, column=0, padx=0, pady=3, sticky=tk.W)
+                self.Label_list_Sin_Sinc.append(self.labelDir_Sin_Sinc)
+
+                # textbox
+                self.myEntrySinSinc = tk.Entry(self.sub_frm, borderwidth=1, width=25)
+                self.myEntrySinSinc.grid(row=10 + i, column=1, pady=3)
+                self.Entry_list_Sin_Sinc.append(self.myEntrySinSinc)
+
+            self._create_enter_button()
+
+
+
+
+
 
 
