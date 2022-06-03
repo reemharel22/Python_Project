@@ -24,7 +24,7 @@ class PlotBox(tk.Tk):
 
     Special_Entry_List = []
 
-    opts = ['Heat equation', 'Schrodinger equation',
+    Equation_opts = ['Heat equation', 'Schrodinger equation',
             'One way wave equation']
 
     visual_opts = ['Image', 'Animation']

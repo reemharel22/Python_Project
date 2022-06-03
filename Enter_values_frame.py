@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import default
 from tkinter import messagebox
 
 import matplotlib.pyplot as plt
@@ -7,20 +8,27 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
-import default
+import default as defaults
 import equation
-import plot_gui
 
-class Gui(tk.Tk):
-    PAD = 30
-
-    # subPAD = 30
-    #
-    # subPAD_out = 30
+class Enter_values_box(tk.Tk):
 
     Chosen_equation = ''
 
     Chosen_initial_condition_form = ''
+
+    Equation_opts = ['Heat equation', 'Schrodinger equation',
+                     'One way wave equation']
+
+    Special_Entry_List = []
+
+    values_to_insert_Gaussian = ['Amplitude:',
+                                 'Sigma:',
+                                 'Mu:']
+
+    values_to_insert_sin_sinc = ['Amplitude:',
+                                 'Phase:',
+                                 'Wave vector:']
 
     Entry_list = []
 
@@ -33,72 +41,6 @@ class Gui(tk.Tk):
     Entry_list_Sin_Sinc = []
 
     Label_list_Sin_Sinc = []
-
-    values_to_insert_Gaussian = ['Amplitude:',
-                                      'Sigma:',
-                                      'Mu:']
-
-    values_to_insert_sin_sinc = ['Amplitude:',
-                                      'Phase:',
-                                      'Wave vector:']
-
-    Entry_label_dict = []
-
-    Special_Entry_List = []
-
-    Equation_opts = ['Heat equation', 'Schrodinger equation',
-            'One way wave equation']
-
-    visual_opts = ['Image', 'Animation']
-
-    Initial_func = ['Gaussian', 'Sinc wave', 'Sine wave']
-
-    def __init__(self, controller):
-
-        super().__init__()
-
-        self.title('Visuquation User Interface')
-
-        self._make_main_frame()
-
-        self.Equation_type = tk.StringVar()
-
-        self.Equation_type.set(self.Equation_opts[0])
-
-        self._make_drop_down_list()
-
-        self._make_sub_frame()
-
-        self._create_enter_button()
-
-        self.plot_gui = plot_gui.PlotBox(self.main_frm)
-
-        # self.plot_gui.create_figure()
-
-        # self._create_figure()
-
-        # self._create_solve_button()
-
-        # self._create_buttons_of_figure()
-
-        self._create_initial_func_drop_down_list()
-
-    def main(self):
-
-        self.mainloop()
-
-    def _error_message(self, message):
-        messagebox.showerror("Error", message)
-
-    def _make_main_frame(self):
-        """
-        This method creates the main frame.
-        """
-
-        self.main_frm = ttk.Frame(self)
-
-        self.main_frm.grid(padx=self.PAD, pady=self.PAD)
-
 
     def _make_sub_frame(self):
         """
@@ -244,27 +186,21 @@ class Gui(tk.Tk):
 
         self.MyButton.grid(sticky='n', padx=5, pady=5)
 
-    def _make_drop_down_list(self):
-        """
-        This method creates a dropdown list to choose the equation type.
-        """
+    def _create_initial_func_drop_down_list(self):
 
-        self.title3 = tk.Label(self.main_frm,
-                               text='Choose equation: ',
+        oMenuWidth1 = len(max(self.Initial_func, key=len))
+
+        self.title4 = tk.Label(self.sub_frm,
+                               text='Choose initial condition form: ',
                                font=('Helvatical bold', 10))
 
-        self.title3.grid(column=0, row=0, padx=5, pady=5)
+        self.clicked3 = tk.StringVar()
 
-        oMenuWidth = len(max(self.Equation_opts, key=len))
+        self.drop3 = tk.OptionMenu(self.sub_frm, self.clicked3, *self.Initial_func,
+        command = self._get_from_initial_func_drop_down_list)
 
-        self.Drop = tk.OptionMenu(self.main_frm, self.Equation_type, *self.Equation_opts,
-                                  command=self._show_special_entries_and_save_choice)
+        self.drop3.config(width=oMenuWidth1)
 
-        self.Drop.config(width=oMenuWidth)
-
-        self.Drop.grid(column=0, row=1)
-
-    # When you click solve, this is called!
     def _get_from_entries(self):
         """
         This method saves the input from the entries.
@@ -306,8 +242,7 @@ class Gui(tk.Tk):
             self.Velocity = self.Entry_list[7].get()
 
         if (self.Equation_opts[1] or self.Equation_opts[2]) and (self.Chosen_initial_condition_form == 'Sinc wave' or
-                                               self.Chosen_initial_condition_form == 'Sine wave'
-        ) and self.Entry_list_Sin_Sinc:
+                                               self.Chosen_initial_condition_form == 'Sine wave') and self.Entry_list_Sin_Sinc:
 
             self.Amplitude_Sin_Sinc = self.Entry_list_Sin_Sinc[0].get()
 
@@ -323,36 +258,6 @@ class Gui(tk.Tk):
             self.Sigma = self.Entry_list_Gaussian[1].get()
 
             self.Mu = self.Entry_list_Gaussian[2].get()
-    """
-    def _create_solve_button(self):
-        
-        This method creates the solve button.
-        
-
-        self.MyButton2 = tk.Button(self.main_frm, text='Start Plotting!',
-        command=self._animate_equation)
-
-        self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
-                            pady=5)
-    """
-
-    def _save_choise(self, e2):
-        self.type_visualization = self.clicked2.get()
-
-    def _create_initial_func_drop_down_list(self):
-
-        oMenuWidth1 = len(max(self.Initial_func, key=len))
-
-        self.title4 = tk.Label(self.sub_frm,
-                               text='Choose initial condition form: ',
-                               font=('Helvatical bold', 10))
-
-        self.clicked3 = tk.StringVar()
-
-        self.drop3 = tk.OptionMenu(self.sub_frm, self.clicked3, *self.Initial_func,
-        command = self._get_from_initial_func_drop_down_list)
-
-        self.drop3.config(width=oMenuWidth1)
 
     def _get_from_initial_func_drop_down_list(self, e3):
 
@@ -365,7 +270,6 @@ class Gui(tk.Tk):
             if self.Entry_list_Sin_Sinc:
 
                 for i in range(0, len(self.values_to_insert_sin_sinc)):
-
                     self.Entry_list_Sin_Sinc[i].grid_forget()
 
                     self.Label_list_Sin_Sinc[i].grid_forget()
@@ -374,18 +278,17 @@ class Gui(tk.Tk):
 
                 self.Label_list_Sin_Sinc.clear()
 
-            if not(self.Entry_list_Gaussian):
+            if not (self.Entry_list_Gaussian):
 
                 for i in range(0, len(self.values_to_insert_Gaussian)):
-
                     # labels
                     self.labelDir_Gaussian = tk.Label(self.sub_frm, text=self.values_to_insert_Gaussian[i])
-                    self.labelDir_Gaussian.grid(row = 10 + i, column=0, padx=0, pady=3, sticky=tk.W)
+                    self.labelDir_Gaussian.grid(row=10 + i, column=0, padx=0, pady=3, sticky=tk.W)
                     self.Label_list_Gaussian.append(self.labelDir)
 
                     # textbox
                     self.myEntryGaussian = tk.Entry(self.sub_frm, borderwidth=1, width=25)
-                    self.myEntryGaussian.grid(row = 10 + i, column=1, pady=3)
+                    self.myEntryGaussian.grid(row=10 + i, column=1, pady=3)
                     self.Entry_list_Gaussian.append(self.myEntryGaussian)
                     self.myEntryGaussian.insert(0, self.values_to_insert_Gaussian[i])
 
@@ -398,7 +301,6 @@ class Gui(tk.Tk):
             if self.Entry_list_Gaussian:
 
                 for i in range(0, len(self.values_to_insert_Gaussian)):
-
                     self.Entry_list_Gaussian[i].grid_forget()
 
                     self.Label_list_Gaussian[i].grid_forget()
@@ -407,7 +309,7 @@ class Gui(tk.Tk):
 
                 self.Label_list_Gaussian.clear()
 
-            if not(self.Entry_list_Sin_Sinc):
+            if not (self.Entry_list_Sin_Sinc):
 
                 for i in range(0, len(self.values_to_insert_sin_sinc)):
                     # labels
@@ -422,10 +324,3 @@ class Gui(tk.Tk):
                     self.myEntrySinSinc.insert(0, self.values_to_insert_sin_sinc[i])
 
             self._create_enter_button()
-
-
-
-
-
-
-
