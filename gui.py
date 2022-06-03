@@ -150,6 +150,8 @@ class Gui(tk.Tk):
 
         self.Entry_label_dict = dict(zip(self.values_to_insert, self.Entry_list))
 
+        self.Entry_label_dict_wave = dict(zip(self.values_to_insert, self.Entry_list))
+
     def _show_special_entries_and_save_choice(self, e):
         """
         This method builds the unique entries and saves
@@ -248,7 +250,6 @@ class Gui(tk.Tk):
         """
         This method creates a dropdown list to choose the equation type.
         """
-
         self.title3 = tk.Label(self.main_frm,
                                text='Choose equation: ',
                                font=('Helvatical bold', 10))
@@ -288,7 +289,7 @@ class Gui(tk.Tk):
             print("Error in input! Please create an error button")
             return
 
-        if self.Chosen_equation== self.Equation_opts[0]: # Heat wave
+        if self.Chosen_equation == self.Equation_opts[0]: # Heat wave
             max_x = float(self.Entry_label_dict["x_max:"].get())
             nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
             max_t = float(self.Entry_label_dict["Final time:"].get())
@@ -297,6 +298,19 @@ class Gui(tk.Tk):
             b_val = float(self.Entry_label_dict["Boundry value at x0:"].get())
             init_val = float(self.Entry_label_dict["Initial condition:"].get())
             self.eq = equation.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
+            self.plot_gui.set_equation(self.eq)
+            self.eq.solve()
+            print("Done solving (should be as a message popup")
+
+        if self.Chosen_equation == self.Equation_opts[2]:  # Heat wave
+            max_x = float(self.Entry_label_dict_wave["x_max:"].get())
+            nx = int(self.Entry_label_dict_wave["Number of Cells (nx):"].get())
+            max_t = float(self.Entry_label_dict_wave["Final time:"].get())
+            nt = int(self.Entry_label_dict_wave["Number cycles:"].get())
+            Velocity = float(self.Entry_label_dict_wave["Velocity:"].get())
+            #b_val = float(self.Entry_label_dict2["Boundry value at x0:"].get())
+            #init_val = float(self.Entry_label_dict2["Initial condition:"].get())
+            self.eq = equation.Wave1D(max_x, nx, max_t, nt, Velocity)
             self.plot_gui.set_equation(self.eq)
             self.eq.solve()
             print("Done solving (should be as a message popup")
@@ -335,9 +349,6 @@ class Gui(tk.Tk):
         self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
                             pady=5)
     """
-
-    def _save_choise(self, e2):
-        self.type_visualization = self.clicked2.get()
 
     def _create_initial_func_drop_down_list(self):
 
