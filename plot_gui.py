@@ -2,24 +2,27 @@ import tkinter as tk
 from tkinter import ttk
 import default
 from tkinter import messagebox
-
+import numpy as np
 import matplotlib.pyplot as plt
 
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
 import default as defaults
 import equation
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg,
+    FigureCanvasTk,
+    NavigationToolbar2Tk
+)
+import matplotlib.animation as animation
+
+import matplotlib
+matplotlib.use('TkAgg')
+
 
 class PlotBox(tk.Tk):
-    values_to_insert_Gaussian = ['Amplitude:',
-                                      'Sigma:',
-                                      'Mu:']
-
-    values_to_insert_sin_sinc = ['Amplitude:',
-                                      'Phase:',
-                                      'Wave vector:']
-
+    """
+    We don't care what equation is solved, just the fact that we have an equation and it has the plot function
+    """
     Entry_label_dict = []
 
     Special_Entry_List = []
@@ -38,6 +41,9 @@ class PlotBox(tk.Tk):
         self._create_plot_button()
         self.step = 0
 
+    def set_equation(self, eq) -> (equation.Equation):
+        self.eq = eq
+
     ## Create the figure box
     def create_figure(self):
         """
@@ -47,16 +53,25 @@ class PlotBox(tk.Tk):
                                  highlightthickness=2, padx=defaults.subPAD,
                                  pady=defaults.subPAD)
         self.Title = tk.Label(self.sub_frm2,
-                              text='Visualization of the solution',
+                              text='Visualization',
                               font=('Helvatical bold', 25))
         self.Title.grid(column=0, row=0)
 
         self.sub_frm2.grid(column=1, row=2, padx=defaults.subPAD_out,
                            pady=defaults.subPAD_out)
 
-        self.fig = Figure(figsize=(6, 3), dpi=100)
-        self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
-        self.canvas.get_tk_widget().grid(column=0, row=2)
+        self.fig = Figure(figsize=(6, 4), dpi=100)
+        # self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
+        self.frame = tk.Frame(self.sub_frm2)
+        self.frame.grid(column=2, row=1, padx=defaults.subPAD_out,
+                           pady=defaults.subPAD_out)
+
+        self.canvas = FigureCanvasTkAgg(self.fig, self.frame)
+        # self.canvas.get_tk_widget().grid(column=0, row=2)
+        self.canvas._tkcanvas.pack(fill=tk.BOTH, expand=True)
+
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame).update()
+
 
     def _create_plot_button(self):
         """
@@ -77,23 +92,23 @@ class PlotBox(tk.Tk):
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Next plot',
         command=self._command_next_plot)
-        self.MyButton2.grid(column=1, row=2, sticky='n', padx=5,
-                            pady=5)
+        self.MyButton2.grid(column=1, row=1, sticky='n', padx=5,
+                            pady=50)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Previous plot',
         command=self._command_prev_plot)
-        self.MyButton2.grid(column=3, row=2, sticky='n', padx=5,
-                            pady=5)
+        self.MyButton2.grid(column=0, row=1, sticky='n', padx=5,
+                            pady=50)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Animate',
                                    command=self._command_animate_plot)
-        self.MyButton2.grid(column=1, row=2, sticky='n', padx=5,
-                            pady=50)
+        self.MyButton2.grid(column=1, row=1, sticky='n', padx=5,
+                            pady=100)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Stop',
                                    command=self._command_animate_plot)
-        self.MyButton2.grid(column=3, row=2, sticky='n', padx=5,
-                            pady=50)
+        self.MyButton2.grid(column=0, row=1, sticky='n', padx=5,
+                            pady=100)
 
     def _animate_equation(self):
         try:
@@ -102,13 +117,30 @@ class PlotBox(tk.Tk):
         except:
             self._error_message("Failed to animate")
 
+
+
     def _command_animate_plot(self):
-        step = self.step - 1
+        self.step = self.step - 1
         # try:
-        #     # while self.fig
+        # self.x = 20*np.arange(0, 2*np.pi, 0.01)        # x-array
+        # self.fig = plt.Figure()
+
+        # self.eq.plot_animation(self.fig)
+        self.ax = self.fig.add_subplot(111)
+        self.line, = self.ax.plot(self.x, np.sin(self.x))
+        print("ANIMATION")
+        #
+        def animate(i):
+            print("whaddup")
+            if i == 100:
+                return
+            self.line.set_ydata(1 + i)  # update the data
+            return self.line,
+        self.ani = animation.FuncAnimation(self.fig, animate)
+
         # except:
-        #     self._error_message("No previous plot found")
-        pass
+        #     print()
+        #     self._error_message("Bad plot")
 
     def _command_next_plot(self):
         try:
@@ -131,5 +163,3 @@ class PlotBox(tk.Tk):
     def _error_message(self, message):
         messagebox.showerror("Error", message)
 
-    def set_equation(self, eq):
-        self.eq = eq

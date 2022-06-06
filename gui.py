@@ -157,9 +157,9 @@ class Gui(tk.Tk):
         This method builds the unique entries and saves
         the choice from the dropdown list.
         """
-        self.Chosen_equation= self.Equation_type.get()
+        self.Chosen_equation = self.Equation_type.get()
 
-        if e == self.Equation_opts[1]:
+        if e == self.Equation_opts[1]: # schrodinger
 
             self.MyButton.grid_forget()
 
@@ -177,7 +177,7 @@ class Gui(tk.Tk):
 
             self._create_enter_button()
 
-        elif e == self.Equation_opts[2]:
+        elif e == self.Equation_opts[2]: # one way wave
 
             self.MyButton.grid_forget()
 
@@ -195,7 +195,7 @@ class Gui(tk.Tk):
 
             self._create_enter_button()
 
-        elif e == self.Equation_opts[0]:
+        elif e == self.Equation_opts[0]: # heat wave!
 
             self.drop3.grid_forget()
 
@@ -241,8 +241,8 @@ class Gui(tk.Tk):
         """
         This method creates the button that saves the entered values.
         """
-        self.MyButton = tk.Button(self.sub_frm, text='Apply!',
-                                  command=self._get_from_entries)
+        self.MyButton = tk.Button(self.sub_frm, text='Solve Equation',
+                                  command=self._click_solve_equation)
 
         self.MyButton.grid(sticky='n', padx=5, pady=5)
 
@@ -266,7 +266,7 @@ class Gui(tk.Tk):
         self.Drop.grid(column=0, row=1)
 
     # When you click solve, this is called!
-    def _get_from_entries(self):
+    def _click_solve_equation(self):
         """
         This method saves the input from the entries.
         """
@@ -284,9 +284,8 @@ class Gui(tk.Tk):
             self.Final_time = self.Entry_list[5].get()
 
             self.Alpha = self.Entry_list[6].get()
-
         except:
-            print("Error in input! Please create an error button")
+            self._error_message("Error in Equation form")
             return
 
         if self.Chosen_equation == self.Equation_opts[0]: # Heat wave
@@ -300,21 +299,19 @@ class Gui(tk.Tk):
             self.eq = equation.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
             self.plot_gui.set_equation(self.eq)
             self.eq.solve()
-            print("Done solving (should be as a message popup")
 
-        if self.Chosen_equation == self.Equation_opts[2]:  # Heat wave
+        if self.Chosen_equation == self.Equation_opts[2]:  # One way wave
             max_x = float(self.Entry_label_dict_wave["x_max:"].get())
             nx = int(self.Entry_label_dict_wave["Number of Cells (nx):"].get())
             max_t = float(self.Entry_label_dict_wave["Final time:"].get())
             nt = int(self.Entry_label_dict_wave["Number cycles:"].get())
             Velocity = float(self.Entry_label_dict_wave["Velocity:"].get())
-            #b_val = float(self.Entry_label_dict2["Boundry value at x0:"].get())
-            #init_val = float(self.Entry_label_dict2["Initial condition:"].get())
             self.eq = equation.Wave1D(max_x, nx, max_t, nt, Velocity)
             self.plot_gui.set_equation(self.eq)
             self.eq.solve()
-            print("Done solving (should be as a message popup")
 
+        # Re'em: Shaya, this is logically wrong, if the above if occurs, this if we never occur... its the same if
+        # Please change this..
         elif self.Chosen_equation == self.Equation_opts[2]:
 
             self.Velocity = self.Entry_list[7].get()
@@ -337,18 +334,7 @@ class Gui(tk.Tk):
             self.Sigma = self.Entry_list_Gaussian[1].get()
 
             self.Mu = self.Entry_list_Gaussian[2].get()
-    """
-    def _create_solve_button(self):
-        
-        This method creates the solve button.
-        
 
-        self.MyButton2 = tk.Button(self.main_frm, text='Start Plotting!',
-        command=self._animate_equation)
-
-        self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
-                            pady=5)
-    """
 
     def _create_initial_func_drop_down_list(self):
 

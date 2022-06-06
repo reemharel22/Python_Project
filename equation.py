@@ -4,7 +4,9 @@ import scipy.linalg
 import scipy
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib import style
 
+# style.use('ggplot')
 
 class Equation:
     def __init__(self):
@@ -106,27 +108,28 @@ class Diffusion1D(Equation):
 
     def plot_animation(self, fig):
         pause = False
-        ax = fig.add_subplot(111)
-        line, = ax.plot(self.x, self.solutions[0, :])
+        self.ax = fig.add_subplot(111)
+        self.line, = self.ax.plot(self.x, self.solutions[0, :])
         plt.xlim([0, self.x[-1]])
         plt.ylim([0, np.max(self.solutions)])
 
-        def animate(i):
+        def animate1(i):
+            print("animating!")
             if i > len(self.solutions):
-                return line,
-            line.set_ydata(self.solutions[i, :])
-            return line,
+                return self.line,
+            self.line.set_ydata(self.solutions[i, :])
+            return self.line,
 
         ani = animation.FuncAnimation(
-            fig, animate, blit=True, frames=200, save_count=50)
+            fig, animate1, interval=1000)#, blit=False, frames=200, save_count=50)
 
         # fig.show()
 
     def start_plot(self, fig):
         self.step = 1
         pause = False
-        ax = fig.subplots()
-        self.line, = ax.plot(self.x, self.solutions[1, :])
+        self.ax = fig.subplots()
+        self.line, = self.ax.plot(self.x, self.solutions[1, :])
         plt.xlim([0, self.x[-1]])
         plt.ylim([0, np.max(self.solutions[:, :])])
 
@@ -139,6 +142,7 @@ class Diffusion1D(Equation):
             self.step = 1
             return False
         self.line.set_ydata(self.solutions[self.step, :])
+
 
 class Wave1D(Equation):
     def __init__(self, max_x, nx, max_t, nt, velocity):
