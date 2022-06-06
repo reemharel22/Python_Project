@@ -118,29 +118,25 @@ class PlotBox(tk.Tk):
             self._error_message("Failed to animate")
 
 
-
     def _command_animate_plot(self):
         self.step = self.step - 1
         # try:
         # self.x = 20*np.arange(0, 2*np.pi, 0.01)        # x-array
         # self.fig = plt.Figure()
 
-        # self.eq.plot_animation(self.fig)
-        self.ax = self.fig.add_subplot(111)
-        self.line, = self.ax.plot(self.x, np.sin(self.x))
-        print("ANIMATION")
+        self.eq.plot_animation(self.fig)
+        # self.ax = self.fig.add_subplot(111)
+        # line, = self.ax.plot(self.x, np.sin(self.x))
+        # #
+        # def animate(i):
+        #     print("ANIMATION")
         #
-        def animate(i):
-            print("whaddup")
-            if i == 100:
-                return
-            self.line.set_ydata(1 + i)  # update the data
-            return self.line,
-        self.ani = animation.FuncAnimation(self.fig, animate)
-
-        # except:
-        #     print()
-        #     self._error_message("Bad plot")
+        #     if i == 100:
+        #         return
+        #     line.set_ydata(np.sin(self.x + i))  # update the data
+        #     return line,
+        # self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
+        self.canvas.draw()
 
     def _command_next_plot(self):
         try:
