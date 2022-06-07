@@ -53,6 +53,8 @@ class Gui(tk.Tk):
 
     Initial_func = ['Gaussian', 'Sinc wave', 'Sine wave']
 
+    potential_type_list = ['harmonic potential' , 'Gaussian potential']
+
     def __init__(self, controller):
 
         super().__init__()
@@ -82,6 +84,8 @@ class Gui(tk.Tk):
         # self._create_buttons_of_figure()
 
         self._create_initial_func_drop_down_list()
+
+        self._create_potential_type_dropdown_list()
 
     def main(self):
 
@@ -150,7 +154,7 @@ class Gui(tk.Tk):
 
         self.Entry_label_dict = dict(zip(self.values_to_insert, self.Entry_list))
 
-        self.Entry_label_dict_wave = dict(zip(self.values_to_insert, self.Entry_list))
+        #self.Entry_label_dict_wave = dict(zip(self.values_to_insert, self.Entry_list))
 
     def _show_special_entries_and_save_choice(self, e):
         """
@@ -161,6 +165,14 @@ class Gui(tk.Tk):
 
         if e == self.Equation_opts[1]: # schrodinger
 
+            ## default
+            for i in range(0,len(self.Entry_list)):
+                self.Entry_list[i].delete(0, 'end')
+            self.Entry_list[1].insert(0, '400')
+            self.Entry_list[2].insert(0,'20')
+            self.Entry_list[4].insert(0, '400')
+            self.Entry_list[5].insert(0, '5')
+            ###
             self.MyButton.grid_forget()
 
             self.Entry_list[-1].grid_forget()
@@ -171,15 +183,23 @@ class Gui(tk.Tk):
 
             self.Label_list[-2].grid_forget()
 
-            self.drop3.grid(column=1, row=9)
+            self.drop4.grid(column=1, row=9)
 
-            self.title4.grid(column=0, row=9, padx=0, pady=3, sticky=tk.W)
+            self.title5.grid(column=0, row=9, padx=0, pady=3, sticky=tk.W)
+
+            self.drop3.grid(column=1, row=10)
+
+            self.title4.grid(column=0, row=10, padx=0, pady=3, sticky=tk.W)
 
             self._create_enter_button()
 
         elif e == self.Equation_opts[2]: # one way wave
 
             self.MyButton.grid_forget()
+
+            self.drop4.grid_forget()
+
+            self.title5.grid_forget()
 
             self.Label_list[-1].grid(row=8,column=0, padx=0, pady=3, sticky=tk.W)
 
@@ -189,9 +209,9 @@ class Gui(tk.Tk):
 
             self.Label_list[-2].grid_forget()
 
-            self.drop3.grid(column=1, row=9)
+            self.drop3.grid(column=1, row=10)
 
-            self.title4.grid(column=0, row=9, padx=0, pady=3, sticky=tk.W)
+            self.title4.grid(column=0, row=10, padx=0, pady=3, sticky=tk.W)
 
             self._create_enter_button()
 
@@ -200,6 +220,10 @@ class Gui(tk.Tk):
             self.drop3.grid_forget()
 
             self.title4.grid_forget()
+
+            self.drop4.grid_forget()
+
+            self.title5.grid_forget()
 
             if self.Entry_list_Sin_Sinc:
 
@@ -299,22 +323,9 @@ class Gui(tk.Tk):
             self.eq = equation.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
             self.plot_gui.set_equation(self.eq)
             self.eq.solve()
-
-        if self.Chosen_equation == self.Equation_opts[2]:  # One way wave
-            max_x = float(self.Entry_label_dict_wave["x_max:"].get())
-            nx = int(self.Entry_label_dict_wave["Number of Cells (nx):"].get())
-            max_t = float(self.Entry_label_dict_wave["Final time:"].get())
-            nt = int(self.Entry_label_dict_wave["Number cycles:"].get())
-            Velocity = float(self.Entry_label_dict_wave["Velocity:"].get())
-            self.eq = equation.Wave1D(max_x, nx, max_t, nt, Velocity)
-            self.plot_gui.set_equation(self.eq)
-            self.eq.solve()
-
         # Re'em: Shaya, this is logically wrong, if the above if occurs, this if we never occur... its the same if
         # Please change this..
-        elif self.Chosen_equation == self.Equation_opts[2]:
-
-            self.Velocity = self.Entry_list[7].get()
+        #if self.Chosen_equation == self.Equation_opts[2]:
 
         if (self.Equation_opts[1] or self.Equation_opts[2]) and (self.Chosen_initial_condition_form == 'Sinc wave' or
                                                self.Chosen_initial_condition_form == 'Sine wave'
@@ -326,7 +337,7 @@ class Gui(tk.Tk):
 
             self.Wave_vector = self.Entry_list_Sin_Sinc[2].get()
 
-        elif (self.Equation_opts[1] or self.Equation_opts[2]) and (self.Chosen_initial_condition_form ==
+        if (self.Equation_opts[1] or self.Equation_opts[2]) and (self.Chosen_initial_condition_form ==
                                                                    'Gaussian') and self.Entry_list_Gaussian:
 
             self.Amplitude_Gaussian = self.Entry_list_Gaussian[0].get()
@@ -335,6 +346,47 @@ class Gui(tk.Tk):
 
             self.Mu = self.Entry_list_Gaussian[2].get()
 
+        if self.Chosen_equation == self.Equation_opts[2]:  # One way wave
+            self.Velocity = self.Entry_list[7].get()
+            max_x = float(self.Entry_label_dict["x_max:"].get())
+            nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
+            max_t = float(self.Entry_label_dict["Final time:"].get())
+            nt = int(self.Entry_label_dict["Number cycles:"].get())
+            Velocity = float(self.Entry_label_dict["Velocity:"].get())
+            init_wave_form = self.Chosen_initial_condition_form
+            if init_wave_form == 'Gaussian':
+                amplitude = float(self.Amplitude_Gaussian)
+                wave_vector_sigma = float(self.Sigma)
+                phase_mu = float(self.Mu)
+            if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
+                amplitude = float(self.Amplitude_Sin_Sinc)
+                wave_vector_sigma = float(self.Wave_vector)
+                phase_mu = float(self.Phase)
+            self.eq = equation.Wave1D(max_x, nx, max_t, nt, Velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu)
+            self.plot_gui.set_equation(self.eq)
+            self.eq.solve()
+
+        if self.Chosen_equation == self.Equation_opts[1]: # Schrodinger
+            max_x = float(self.Entry_label_dict["x_max:"].get())
+            nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
+            max_t = float(self.Entry_label_dict["Final time:"].get())
+            nt = int(self.Entry_label_dict["Number cycles:"].get())
+            init_wave_form = self.Chosen_initial_condition_form
+            potential_type = self.Chosen_potential_type
+            if init_wave_form == 'Gaussian':
+                wave_vector_sigma = float(self.Sigma)
+                phase_mu = float(self.Mu)
+            if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
+                wave_vector_sigma = float(self.Wave_vector)
+                phase_mu = float(self.Phase)
+            if self.Chosen_potential_type == 'harmonic potential':
+                potential_type = 'harmonic potential'
+            if self.Chosen_potential_type == 'Gaussian potential':
+                potential_type = 'Gaussian potential'
+            self.eq = equation.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, wave_vector_sigma, phase_mu,
+                                             potential_type)
+            self.plot_gui.set_equation(self.eq)
+            self.eq.solve()
 
     def _create_initial_func_drop_down_list(self):
 
@@ -345,6 +397,8 @@ class Gui(tk.Tk):
                                font=('Helvatical bold', 10))
 
         self.clicked3 = tk.StringVar()
+
+        self.clicked3.set(self.Initial_func[0])
 
         self.drop3 = tk.OptionMenu(self.sub_frm, self.clicked3, *self.Initial_func,
         command = self._get_from_initial_func_drop_down_list)
@@ -377,12 +431,12 @@ class Gui(tk.Tk):
 
                     # labels
                     self.labelDir_Gaussian = tk.Label(self.sub_frm, text=self.values_to_insert_Gaussian[i])
-                    self.labelDir_Gaussian.grid(row = 10 + i, column=0, padx=0, pady=3, sticky=tk.W)
+                    self.labelDir_Gaussian.grid(row = 11 + i, column=0, padx=0, pady=3, sticky=tk.W)
                     self.Label_list_Gaussian.append(self.labelDir)
 
                     # textbox
                     self.myEntryGaussian = tk.Entry(self.sub_frm, borderwidth=1, width=25)
-                    self.myEntryGaussian.grid(row = 10 + i, column=1, pady=3)
+                    self.myEntryGaussian.grid(row = 11 + i, column=1, pady=3)
                     self.Entry_list_Gaussian.append(self.myEntryGaussian)
                     self.myEntryGaussian.insert(0, self.values_to_insert_Gaussian[i])
 
@@ -409,17 +463,37 @@ class Gui(tk.Tk):
                 for i in range(0, len(self.values_to_insert_sin_sinc)):
                     # labels
                     self.labelDir_Sin_Sinc = tk.Label(self.sub_frm, text=self.values_to_insert_sin_sinc[i])
-                    self.labelDir_Sin_Sinc.grid(row=10 + i, column=0, padx=0, pady=3, sticky=tk.W)
+                    self.labelDir_Sin_Sinc.grid(row=11 + i, column=0, padx=0, pady=3, sticky=tk.W)
                     self.Label_list_Sin_Sinc.append(self.labelDir_Sin_Sinc)
 
                     # textbox
                     self.myEntrySinSinc = tk.Entry(self.sub_frm, borderwidth=1, width=25)
-                    self.myEntrySinSinc.grid(row=10 + i, column=1, pady=3)
+                    self.myEntrySinSinc.grid(row=11 + i, column=1, pady=3)
                     self.Entry_list_Sin_Sinc.append(self.myEntrySinSinc)
                     self.myEntrySinSinc.insert(0, self.values_to_insert_sin_sinc[i])
 
             self._create_enter_button()
 
+    def _create_potential_type_dropdown_list(self):
+
+        oMenuWidth2 = len(max(self.potential_type_list, key=len))
+
+        self.title5 = tk.Label(self.sub_frm,
+                               text='Choose potential type: ',
+                               font=('Helvatical bold', 10))
+
+        self.clicked4 = tk.StringVar()
+
+        self.clicked4.set(self.potential_type_list[1])
+
+        self.drop4 = tk.OptionMenu(self.sub_frm, self.clicked4, *self.potential_type_list,
+        command = self._get_from_potential_type_drop_down_list)
+
+        self.drop4.config(width=oMenuWidth2)
+
+    def _get_from_potential_type_drop_down_list(self, e4):
+
+        self.Chosen_potential_type = self.clicked4.get()
 
 
 
