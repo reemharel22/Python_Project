@@ -76,14 +76,6 @@ class Gui(tk.Tk):
 
         self.plot_gui = plot_gui.PlotBox(self.main_frm)
 
-        # self.plot_gui.create_figure()
-
-        # self._create_figure()
-
-        # self._create_solve_button()
-
-        # self._create_buttons_of_figure()
-
         self._create_initial_func_drop_down_list()
 
         self._create_potential_type_dropdown_list()
@@ -310,20 +302,23 @@ class Gui(tk.Tk):
 
             self.Alpha = self.Entry_list[6].get()
         except:
-            self._error_message("Error in Equation form")
+            self._error_message("Error in Equation form - did you miss an item?")
             return
 
         if self.Chosen_equation == self.Equation_opts[0]: # Heat wave
-            max_x = float(self.Entry_label_dict["x_max:"].get())
-            nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
-            max_t = float(self.Entry_label_dict["Final time:"].get())
-            nt = int(self.Entry_label_dict["Number cycles:"].get())
-            alpha = float(self.Entry_label_dict["Alpha:"].get())
-            b_val = float(self.Entry_label_dict["Boundry value at x0:"].get())
-            init_val = float(self.Entry_label_dict["Initial condition:"].get())
+            try:
+                max_x = float(self.Entry_label_dict["x_max:"].get())
+                nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
+                max_t = float(self.Entry_label_dict["Final time:"].get())
+                nt = int(self.Entry_label_dict["Number cycles:"].get())
+                alpha = float(self.Entry_label_dict["Alpha:"].get())
+                b_val = float(self.Entry_label_dict["Boundry value at x0:"].get())
+                init_val = float(self.Entry_label_dict["Initial condition:"].get())
+            except:
+                self._error_message("Bad input in equation data. Please insert floats or integers.")
+                return
             self.eq = diffusion_1d.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
-            self.plot_gui.set_equation(self.eq)
-            self.eq.solve()
+
         # Re'em: Shaya, this is logically wrong, if the above if occurs, this if we never occur... its the same if
         # Please change this..
         #if self.Chosen_equation == self.Equation_opts[2]:
@@ -349,45 +344,51 @@ class Gui(tk.Tk):
 
         if self.Chosen_equation == self.Equation_opts[2]:  # One way wave
             self.Velocity = self.Entry_list[7].get()
-            max_x = float(self.Entry_label_dict["x_max:"].get())
-            nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
-            max_t = float(self.Entry_label_dict["Final time:"].get())
-            nt = int(self.Entry_label_dict["Number cycles:"].get())
-            Velocity = float(self.Entry_label_dict["Velocity:"].get())
-            init_wave_form = self.Chosen_initial_condition_form
-            if init_wave_form == 'Gaussian':
-                amplitude = float(self.Amplitude_Gaussian)
-                wave_vector_sigma = float(self.Sigma)
-                phase_mu = float(self.Mu)
-            if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
-                amplitude = float(self.Amplitude_Sin_Sinc)
-                wave_vector_sigma = float(self.Wave_vector)
-                phase_mu = float(self.Phase)
+            try:
+                max_x = float(self.Entry_label_dict["x_max:"].get())
+                nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
+                max_t = float(self.Entry_label_dict["Final time:"].get())
+                nt = int(self.Entry_label_dict["Number cycles:"].get())
+                Velocity = float(self.Entry_label_dict["Velocity:"].get())
+                init_wave_form = self.Chosen_initial_condition_form
+                if init_wave_form == 'Gaussian':
+                    amplitude = float(self.Amplitude_Gaussian)
+                    wave_vector_sigma = float(self.Sigma)
+                    phase_mu = float(self.Mu)
+                if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
+                    amplitude = float(self.Amplitude_Sin_Sinc)
+                    wave_vector_sigma = float(self.Wave_vector)
+                    phase_mu = float(self.Phase)
+            except:
+                self._error_message("Bad input in equation data. Please insert floats or integers.")
+                return
             self.eq = equation.Wave1D(max_x, nx, max_t, nt, Velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu)
-            self.plot_gui.set_equation(self.eq)
-            self.eq.solve()
 
         if self.Chosen_equation == self.Equation_opts[1]: # Schrodinger
-            max_x = float(self.Entry_label_dict["x_max:"].get())
-            nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
-            max_t = float(self.Entry_label_dict["Final time:"].get())
-            nt = int(self.Entry_label_dict["Number cycles:"].get())
-            init_wave_form = self.Chosen_initial_condition_form
-            potential_type = self.Chosen_potential_type
-            if init_wave_form == 'Gaussian':
-                wave_vector_sigma = float(self.Sigma)
-                phase_mu = float(self.Mu)
-            if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
-                wave_vector_sigma = float(self.Wave_vector)
-                phase_mu = float(self.Phase)
-            if self.Chosen_potential_type == 'harmonic potential':
-                potential_type = 'harmonic potential'
-            if self.Chosen_potential_type == 'Gaussian potential':
-                potential_type = 'Gaussian potential'
+            try:
+                max_x = float(self.Entry_label_dict["x_max:"].get())
+                nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
+                max_t = float(self.Entry_label_dict["Final time:"].get())
+                nt = int(self.Entry_label_dict["Number cycles:"].get())
+                init_wave_form = self.Chosen_initial_condition_form
+                potential_type = self.Chosen_potential_type
+                if init_wave_form == 'Gaussian':
+                    wave_vector_sigma = float(self.Sigma)
+                    phase_mu = float(self.Mu)
+                if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
+                    wave_vector_sigma = float(self.Wave_vector)
+                    phase_mu = float(self.Phase)
+                if self.Chosen_potential_type == 'harmonic potential':
+                    potential_type = 'harmonic potential'
+                if self.Chosen_potential_type == 'Gaussian potential':
+                    potential_type = 'Gaussian potential'
+            except:
+                self._error_message("Bad input in equation data. Please insert floats or integers.")
+                return
             self.eq = equation.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, wave_vector_sigma, phase_mu,
                                              potential_type)
-            self.plot_gui.set_equation(self.eq)
-            self.eq.solve()
+        self.plot_gui.set_equation(self.eq)
+        self.eq.solve()
 
     def _create_initial_func_drop_down_list(self):
 

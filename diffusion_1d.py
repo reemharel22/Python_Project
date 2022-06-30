@@ -61,8 +61,9 @@ class Diffusion1D(Equation):
             self.u_current[i] = self.u_prev[i] + self.F * (self.u_prev[i - 1] - 2 * self.u_prev[i] + self.u_prev[i + 1])
 
     def update(self):
-        self.cycle = self.cycle + 1
         self.solutions[self.cycle, :] = self.u_current
+        self.cycle = self.cycle + 1
+
         self.u_prev = self.u_current
 
     #

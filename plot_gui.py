@@ -68,8 +68,19 @@ class PlotBox(tk.Tk):
 
         self.sub_frm2.grid(column=1, row=2, padx=defaults.subPAD_out,
                            pady=defaults.subPAD_out)
+        self._reset_figure()
+        # # CReate the figure in which the plot itself will be shown
+        # self.fig = Figure(figsize=(6, 4), dpi=100)
+        # # self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
+        # self.frame = tk.Frame(self.sub_frm2)
+        # self.frame.grid(column=2, row=1, padx=defaults.subPAD_out,
+        #                    pady=defaults.subPAD_out)
+        # self.canvas = FigureCanvasTkAgg(self.fig, self.frame)
+        # self.canvas._tkcanvas.pack(fill=tk.BOTH, expand=True)
+        # self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame).update()
 
-        # CReate the figure in which the plot itself will be shown
+    def _reset_figure(self):
+        self.step = 0
         self.fig = Figure(figsize=(6, 4), dpi=100)
         # self.canvas = FigureCanvasTkAgg(self.fig, self.sub_frm2)
         self.frame = tk.Frame(self.sub_frm2)
@@ -78,7 +89,6 @@ class PlotBox(tk.Tk):
         self.canvas = FigureCanvasTkAgg(self.fig, self.frame)
         self.canvas._tkcanvas.pack(fill=tk.BOTH, expand=True)
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame).update()
-
 
     def _create_plot_button(self):
         """
@@ -124,6 +134,7 @@ class PlotBox(tk.Tk):
         """
         try:
             self.step = 0 # reset...
+            self._reset_figure()
             self.eq.start_plot(self.fig)
             self.canvas.draw()
         except:

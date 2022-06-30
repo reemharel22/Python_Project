@@ -71,10 +71,6 @@ class Equation:
         self.line.set_ydata(self.solutions[self.step, :])
 
 
-
-
-
-
 class Wave1D(Equation):
     def __init__(self, max_x, nx, max_t, nt, velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu):
         self.t = np.linspace(0, max_t, nt + 1)
