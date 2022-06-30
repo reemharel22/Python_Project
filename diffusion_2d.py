@@ -48,6 +48,5 @@ class Diffusion2D(Equation):
             for j in range(1, self.ny - 1, self.dy):
                 self.u_current[i, j] = self.gamma * (self.u_prev[i+1][j] + self.u_prev[i-1][j] + self.u_prev[i][j+1] + self.u_prev[i][j-1] - 4*self.u_prev[i][j]) + self.u_prev[i][j]
   
-        
     def update(self):
         self.u_prev = self.u_current

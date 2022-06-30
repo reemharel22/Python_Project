@@ -9,6 +9,7 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.figure import Figure
 import default
 import equation
+import diffusion_1d
 import plot_gui
 
 class Gui(tk.Tk):
@@ -320,7 +321,7 @@ class Gui(tk.Tk):
             alpha = float(self.Entry_label_dict["Alpha:"].get())
             b_val = float(self.Entry_label_dict["Boundry value at x0:"].get())
             init_val = float(self.Entry_label_dict["Initial condition:"].get())
-            self.eq = equation.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
+            self.eq = diffusion_1d.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
             self.plot_gui.set_equation(self.eq)
             self.eq.solve()
         # Re'em: Shaya, this is logically wrong, if the above if occurs, this if we never occur... its the same if

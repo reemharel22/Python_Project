@@ -11,6 +11,8 @@ from matplotlib import style
 
 class Equation:
     def __init__(self):
+        # self.step = 0 should be defined by inheritence claseses
+        # self.solutions should be defined by inheritence classes
         pass
 
     def return_results(self):
@@ -25,7 +27,6 @@ class Equation:
             self.solve_time_step()
             self.update()
 
-
     def update(self):
         pass
 
@@ -35,89 +36,12 @@ class Equation:
     def solve_time_step(self):
         pass
 
-    def start_plot(self, fig):
-        pass
-
-    def plot_step(self, step):
-        pass
-
-class Diffusion1D(Equation):
-    def __init__(self, max_x, nx, max_t, nt, alpha, b_val, init_val):
-        # Representation of sparse matrix and right-hand side
-        self.x = np.linspace(0, max_x, nx + 1)  # mesh points in grid
-        self.nx = nx
-        self.dx = self.x[1] - self.x[0]
-        self.t = np.linspace(0, max_t, nt + 1)  # mesh points in grid
-        self.nt = nt
-        self.dt = self.t[1] - self.t[0]
-        self.F = alpha * self.dt / self.dx ** 2
-        self.alpha = alpha
-        self.u_current = np.zeros(self.nx + 1)  # unknown u at new time level
-        self.u_prev = np.zeros(self.nx + 1)
-        self.main = np.zeros(self.nx + 1)
-        self.lower = np.zeros(self.nx - 1)
-        self.upper = np.zeros(self.nx - 1)
-        self.b = np.zeros(self.nx + 1)
-        self.main[:] = 1 + 2 * self.F
-        self.main[0] = 1
-        self.main[self.nx] = 1
-        self.lower[:] = -self.F  # 1
-        self.upper[:] = -self.F  # 1
-        self.A = np.zeros((self.nx + 1, self.nx + 1))
-
-        for i in range(1, self.nx):
-            self.A[i, i - 1] = -self.F
-            self.A[i, i + 1] = -self.F
-            self.A[i, i] = 1 + 2 * self.F
-        self.A[0, 0] = self.A[self.nx, self.nx] = 1
-        # self.A = scipy.sparse.diags(
-        #     diagonals=[self.main, self.lower, self.upper],
-        #     offsets=[0, -1, 1], shape=(self.nx + 1, self.nx + 1),
-        #     format='csr')
-        # self.A.todense()  # Check that A is correct
-        self.boundary_val = b_val
-        self.cycle = 0
-        self.time_steps = nt
-        self.solutions = np.zeros([nt+1, self.nx + 1])
-        self.u_prev[:] = init_val
-        self.step = 1
-        self.u_prev[0] = b_val# init val
-        self.u_current[:] = self.u_prev[:]
-
-    def finish_execution(self):
-        if self.cycle >= self.nt:
-            return True
-        else:
-            return False
-
-    def set_boundary_condition(self):
-        self.main[0] = 1
-        self.main[self.nx] = 1
-        # self.u_prev[0] = b_val
-        for i in range(1, self.nx):
-            self.b[i] = -self.u_prev[i]
-        self.b[0] = self.b[self.nx] = 0
-
-    def solve_time_step(self):
-        for i in range(1, self.nx):
-            self.u_current[i] = self.u_prev[i] + self.F * (self.u_prev[i - 1] - 2 * self.u_prev[i] + self.u_prev[i + 1])
-
-    def update(self):
-        self.cycle = self.cycle + 1
-        self.solutions[self.cycle, :] = self.u_current
-        self.u_prev = self.u_current
-
+    # it is common for all 1d equations to do this..
     def plot_animation(self, fig):
-        pause = False
         self.fig = fig
-        # self.x = 20 * np.arange(0, 2 * np.pi, 0.01)  # x-array
-        # self.fig = plt.Figure()
-
-        # self.eq.plot_animation(self.fig)
         self.ax = self.fig.add_subplot(111)
         line, = self.ax.plot(self.x, self.solutions[1, :])
 
-        #
         def animate(i):
             if i >= len(self.solutions):
                 return line,
@@ -125,32 +49,16 @@ class Diffusion1D(Equation):
             return line,
 
         self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
+        return self.ani
 
-
-        # self.ax = fig.add_subplot(111)
-        # self.line, = self.ax.plot(self.x, self.solutions[0, :])
-        # plt.xlim([0, self.x[-1]])
-        # plt.ylim([0, np.max(self.solutions)])
-        #
-        # def animate1(i):
-        #     print("animating!")
-        #     if i > len(self.solutions):
-        #         return self.line,
-        #     self.line.set_ydata(self.solutions[i, :])
-        #     return self.line,
-        #
-        # ani = animation.FuncAnimation(
-        #     fig, animate1, interval=1000)#, blit=False, frames=200, save_count=50)
-
-        # fig.show()
-
-    def start_plot(self, fig):
+    def start_plot(self, fig, xlabel, ylabel):
         self.step = 1
-        pause = False
         self.ax = fig.subplots()
         self.line, = self.ax.plot(self.x, self.solutions[1, :])
         plt.xlim([0, self.x[-1]])
         plt.ylim([0, np.max(self.solutions[:, :])])
+        plt.xlabel('Position')
+        plt.ylabel('Flux')
 
     def plot_step(self, i):
         self.step = self.step + i
@@ -161,6 +69,11 @@ class Diffusion1D(Equation):
             self.step = 1
             return False
         self.line.set_ydata(self.solutions[self.step, :])
+
+
+
+
+
 
 class Wave1D(Equation):
     def __init__(self, max_x, nx, max_t, nt, velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu):
@@ -204,42 +117,45 @@ class Wave1D(Equation):
         self.solutions[self.cycle, :] = self.u_current
         self.u_prev = self.u_current
 
-    def plot_animation(self, fig):
-        pause = False
-        self.fig = fig
-        # self.x = 20 * np.arange(0, 2 * np.pi, 0.01)  # x-array
-        # self.fig = plt.Figure()
-
-        # self.eq.plot_animation(self.fig)
-        self.ax = self.fig.add_subplot(111)
-        line, = self.ax.plot(self.x, self.solutions[1, :])
-
-        #
-        def animate(i):
-            if i >= len(self.solutions):
-                return line,
-            line.set_ydata(self.solutions[i, :])
-            return line,
-
-        self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
+    # def plot_animation(self, fig):
+    #     pause = False
+    #     self.fig = fig
+    #     # self.x = 20 * np.arange(0, 2 * np.pi, 0.01)  # x-array
+    #     # self.fig = plt.Figure()
+    #
+    #     # self.eq.plot_animation(self.fig)
+    #     self.ax = self.fig.add_subplot(111)
+    #     line, = self.ax.plot(self.x, self.solutions[1, :])
+    #
+    #     #
+    #     def animate(i):
+    #         if i >= len(self.solutions):
+    #             return line,
+    #         line.set_ydata(self.solutions[i, :])
+    #         return line,
+    #
+    #     self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
 
     def start_plot(self, fig):
-        self.step = 1
-        pause = False
-        ax = fig.subplots()
-        self.line, = ax.plot(self.x, self.solutions[1, :])
-        plt.xlim([0, self.x[-1]])
-        plt.ylim([0, np.max(self.solutions[:, :])])
+        # self.step = 1
+        # pause = False
+        # ax = fig.subplots()
+        # self.line, = ax.plot(self.x, self.solutions[1, :])
+        # plt.xlim([0, self.x[-1]])
+        # plt.ylim([0, np.max(self.solutions[:, :])])
+        super().start_plot(fig, xlabel='Position', ylabel='Velocity (check me)')
 
-    def plot_step(self, i):
-        self.step = self.step + i
-        if self.step > len(self.solutions):
-            self.step = 1
-            return False
-        if self.step < 1:
-            self.step = 1
-            return False
-        self.line.set_ydata(self.solutions[self.step, :])
+
+    # def plot_step(self, i):
+    #     self.step = self.step + i
+    #     if self.step > len(self.solutions):
+    #         self.step = 1
+    #         return False
+    #     if self.step < 1:
+    #         self.step = 1
+    #         return False
+    #     self.line.set_ydata(self.solutions[self.step, :])
+
 
 class schrodinger1D(Equation):
     def __init__(self, max_x, nx, max_t, nt, init_wave_form, wave_vector_sigma, phase_mu, potential_type):
@@ -298,42 +214,38 @@ class schrodinger1D(Equation):
         self.solutions[self.cycle, :] = (abs(self.u_current))**2
         self.u_prev = self.u_current
 
-    def plot_animation(self, fig):
-        pause = False
-        self.fig = fig
-        # self.x = 20 * np.arange(0, 2 * np.pi, 0.01)  # x-array
-        # self.fig = plt.Figure()
-
-        # self.eq.plot_animation(self.fig)
-        self.ax = self.fig.add_subplot(111)
-        line, = self.ax.plot(self.x, self.solutions[1, :])
-
-        #
-        def animate(i):
-            if i >= len(self.solutions):
-                return line,
-            line.set_ydata(self.solutions[i, :])
-            return line,
-
-        self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
+    # def plot_animation(self, fig):
+    #     pause = False
+    #     self.fig = fig
+    #     # self.x = 20 * np.arange(0, 2 * np.pi, 0.01)  # x-array
+    #     # self.fig = plt.Figure()
+    #
+    #     # self.eq.plot_animation(self.fig)
+    #     self.ax = self.fig.add_subplot(111)
+    #     line, = self.ax.plot(self.x, self.solutions[1, :])
+    #
+    #     #
+    #     def animate(i):
+    #         if i >= len(self.solutions):
+    #             return line,
+    #         line.set_ydata(self.solutions[i, :])
+    #         return line,
+    #
+    #     self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
 
     def start_plot(self, fig):
-        self.step = 1
-        pause = False
-        ax = fig.subplots()
-        self.line, = ax.plot(self.x, self.solutions[1, :])
-        plt.xlim([0, self.x[-1]])
-        plt.ylim([0, np.max(self.solutions[:, :])])
+        super().start_plot(fig, xlabel='Position', ylabel='Distribution (check me)')
 
-    def plot_step(self, i):
-        self.step = self.step + i
-        if self.step > len(self.solutions):
-            self.step = 1
-            return False
-        if self.step < 1:
-            self.step = 1
-            return False
-        self.line.set_ydata(self.solutions[self.step, :])
+
+    # def plot_step(self, i):
+    #     self.step = self.step + i
+    #     if self.step > len(self.solutions):
+    #         self.step = 1
+    #         return False
+    #     if self.step < 1:
+    #         self.step = 1
+    #         return False
+    #     self.line.set_ydata(self.solutions[self.step, :])
 
 
 
