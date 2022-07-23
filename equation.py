@@ -51,7 +51,7 @@ class Equation:
         self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
         return self.ani
 
-    def start_plot(self, fig, xlabel ='Position' , ylabel = 'flux'):
+    def start_plot(self, fig, xlabel ='Position' , ylabel = 'flux', title='Heat flux vs position'):
         self.step = 1
         self.ax = fig.subplots()
         self.line, = self.ax.plot(self.x, self.solutions[1, :])
@@ -63,6 +63,9 @@ class Equation:
         plt.ylim([0, np.max(self.solutions[:, :])])
         #plt.xlabel('Position')
         #plt.ylabel('Flux')
+        self.ax.set_title(title)
+        self.ax.grid()
+
 
     def plot_step(self, i):
         self.step = self.step + i
