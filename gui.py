@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
+import wave_1d
+import schrodinger_1d
 import default
 import equation
 import diffusion_1d
@@ -158,15 +160,17 @@ class Gui(tk.Tk):
 
         if e == self.Equation_opts[1]: # schrodinger
 
-            ## default
-            for i in range(0,len(self.Entry_list)):
-                self.Entry_list[i].delete(0, 'end')
-            self.Entry_list[1].insert(0, '400')
-            self.Entry_list[2].insert(0,'20')
-            self.Entry_list[4].insert(0, '400')
-            self.Entry_list[5].insert(0, '5')
-            ###
             self.MyButton.grid_forget()
+
+            ###
+            self.Entry_list[0].grid_forget()
+
+            self.Label_list[0].grid_forget()
+
+            self.Entry_list[3].grid_forget()
+
+            self.Label_list[3].grid_forget()
+            ###
 
             self.Entry_list[-1].grid_forget()
 
@@ -186,6 +190,15 @@ class Gui(tk.Tk):
 
             self._create_enter_button()
 
+            ## default
+            for i in range(0, len(self.Entry_list)):
+                self.Entry_list[i].delete(0, 'end')
+            self.Entry_list[1].insert(0, '400')
+            self.Entry_list[2].insert(0, '20')
+            self.Entry_list[4].insert(0, '400')
+            self.Entry_list[5].insert(0, '5')
+            ###
+
         elif e == self.Equation_opts[2]: # one way wave
 
             self.MyButton.grid_forget()
@@ -193,6 +206,16 @@ class Gui(tk.Tk):
             self.drop4.grid_forget()
 
             self.title5.grid_forget()
+
+            ###
+            self.Entry_list[0].grid_forget()
+
+            self.Label_list[0].grid_forget()
+
+            self.Entry_list[3].grid_forget()
+
+            self.Label_list[3].grid_forget()
+            ###
 
             self.Label_list[-1].grid(row=8,column=0, padx=0, pady=3, sticky=tk.W)
 
@@ -207,6 +230,16 @@ class Gui(tk.Tk):
             self.title4.grid(column=0, row=10, padx=0, pady=3, sticky=tk.W)
 
             self._create_enter_button()
+
+            ## default
+            for i in range(0, len(self.Entry_list)):
+                self.Entry_list[i].delete(0, 'end')
+            self.Entry_list[1].insert(0, '100')
+            self.Entry_list[2].insert(0, '10')
+            self.Entry_list[4].insert(0, '500')
+            self.Entry_list[5].insert(0, '500')
+            self.Entry_list[7].insert(0, '0.006')
+            ###
 
         elif e == self.Equation_opts[0]: # heat wave!
 
@@ -244,6 +277,14 @@ class Gui(tk.Tk):
 
             self.MyButton.grid_forget()
 
+            self.Entry_list[0].grid(row=1, column=1, padx=0, pady=3)#, sticky=tk.W)
+
+            self.Label_list[0].grid(row=1, column=0, padx=0, pady=3, sticky=tk.W)
+
+            self.Entry_list[3].grid(row=4, column=1, padx=0, pady=3)#, sticky=tk.W)
+
+            self.Label_list[3].grid(row=4, column=0, padx=0, pady=3, sticky=tk.W)
+
             self.Label_list[-2].grid(row=8, column=0, padx=0, pady=3, sticky=tk.W)
 
             self.Entry_list[-2].grid(row=8, column=1, padx=5, pady=5)
@@ -253,6 +294,18 @@ class Gui(tk.Tk):
             self.Label_list[-1].grid_forget()
 
             self._create_enter_button()
+
+            ## default
+            for i in range(0, len(self.Entry_list)):
+                self.Entry_list[i].delete(0, 'end')
+            self.Entry_list[0].insert(0, '0.01')
+            self.Entry_list[1].insert(0, '50')
+            self.Entry_list[2].insert(0, '1.5')
+            self.Entry_list[3].insert(0, '100.0')
+            self.Entry_list[4].insert(0, '100')
+            self.Entry_list[5].insert(0, '3')
+            self.Entry_list[6].insert(0, '0.01')
+            ###
 
     def _create_enter_button(self):
         """
@@ -323,9 +376,13 @@ class Gui(tk.Tk):
         # Please change this..
         #if self.Chosen_equation == self.Equation_opts[2]:
 
-        if (self.Equation_opts[1] or self.Equation_opts[2]) and (self.Chosen_initial_condition_form == 'Sinc wave' or
+        if (self.Chosen_equation == self.Equation_opts[1] or self.Chosen_equation == self.Equation_opts[2]) and (self.Chosen_initial_condition_form == 'Sinc wave' or
                                                self.Chosen_initial_condition_form == 'Sine wave'
         ) and self.Entry_list_Sin_Sinc:
+
+            #if self.Chosen_equation == self.Equation_opts[1]:
+
+            #    self.Entry_list_Sin_Sinc[0].grid_forget()
 
             self.Amplitude_Sin_Sinc = self.Entry_list_Sin_Sinc[0].get()
 
@@ -362,8 +419,8 @@ class Gui(tk.Tk):
             except:
                 self._error_message("Bad input in equation data. Please insert floats or integers.")
                 return
-            self.eq = equation.Wave1D(max_x, nx, max_t, nt, Velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu)
-
+            self.eq = wave_1d.Wave1D(max_x, nx, max_t, nt, Velocity, init_wave_form,
+                                     amplitude, wave_vector_sigma, phase_mu)
         if self.Chosen_equation == self.Equation_opts[1]: # Schrodinger
             try:
                 max_x = float(self.Entry_label_dict["x_max:"].get())
@@ -373,9 +430,11 @@ class Gui(tk.Tk):
                 init_wave_form = self.Chosen_initial_condition_form
                 potential_type = self.Chosen_potential_type
                 if init_wave_form == 'Gaussian':
+                    amplitude = float(self.Amplitude_Gaussian)
                     wave_vector_sigma = float(self.Sigma)
                     phase_mu = float(self.Mu)
                 if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
+                    amplitude = float(self.Amplitude_Sin_Sinc)
                     wave_vector_sigma = float(self.Wave_vector)
                     phase_mu = float(self.Phase)
                 if self.Chosen_potential_type == 'harmonic potential':
@@ -385,8 +444,8 @@ class Gui(tk.Tk):
             except:
                 self._error_message("Bad input in equation data. Please insert floats or integers.")
                 return
-            self.eq = equation.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, wave_vector_sigma, phase_mu,
-                                             potential_type)
+            self.eq = schrodinger_1d.schrodinger1D(max_x, nx, max_t, nt, init_wave_form,amplitude, wave_vector_sigma,
+                                                   phase_mu,potential_type)
         self.plot_gui.set_equation(self.eq)
         self.eq.solve()
 
@@ -419,15 +478,15 @@ class Gui(tk.Tk):
 
                 for i in range(0, len(self.values_to_insert_sin_sinc)):
 
-                    self.Entry_list_Sin_Sinc[i].grid_forget()
-
                     self.Label_list_Sin_Sinc[i].grid_forget()
+
+                    self.Entry_list_Sin_Sinc[i].grid_forget()
 
                 self.Entry_list_Sin_Sinc.clear()
 
                 self.Label_list_Sin_Sinc.clear()
 
-            if not(self.Entry_list_Gaussian):
+            if not self.Entry_list_Gaussian:
 
                 for i in range(0, len(self.values_to_insert_Gaussian)):
 
@@ -440,7 +499,14 @@ class Gui(tk.Tk):
                     self.myEntryGaussian = tk.Entry(self.sub_frm, borderwidth=1, width=25)
                     self.myEntryGaussian.grid(row = 11 + i, column=1, pady=3)
                     self.Entry_list_Gaussian.append(self.myEntryGaussian)
-                    self.myEntryGaussian.insert(0, self.values_to_insert_Gaussian[i])
+                    #self.myEntryGaussian.insert(0, self.values_to_insert_Gaussian[i])
+
+            ## default
+            if len(self.Entry_list_Gaussian[0].get()) == 0:
+                self.Entry_list_Gaussian[0].insert(0, '10')
+                self.Entry_list_Gaussian[1].insert(0, '1')
+                self.Entry_list_Gaussian[2].insert(0, '-5')
+            ###
 
             self._create_enter_button()
 
@@ -452,15 +518,15 @@ class Gui(tk.Tk):
 
                 for i in range(0, len(self.values_to_insert_Gaussian)):
 
-                    self.Entry_list_Gaussian[i].grid_forget()
-
                     self.Label_list_Gaussian[i].grid_forget()
+
+                    self.Entry_list_Gaussian[i].grid_forget()
 
                 self.Entry_list_Gaussian.clear()
 
                 self.Label_list_Gaussian.clear()
 
-            if not(self.Entry_list_Sin_Sinc):
+            if not self.Entry_list_Sin_Sinc:
 
                 for i in range(0, len(self.values_to_insert_sin_sinc)):
                     # labels
@@ -472,7 +538,14 @@ class Gui(tk.Tk):
                     self.myEntrySinSinc = tk.Entry(self.sub_frm, borderwidth=1, width=25)
                     self.myEntrySinSinc.grid(row=11 + i, column=1, pady=3)
                     self.Entry_list_Sin_Sinc.append(self.myEntrySinSinc)
-                    self.myEntrySinSinc.insert(0, self.values_to_insert_sin_sinc[i])
+                    #self.myEntrySinSinc.insert(0, self.values_to_insert_sin_sinc[i])
+
+            ## default
+            if len(self.Entry_list_Sin_Sinc[0].get()) == 0:
+                self.Entry_list_Sin_Sinc[0].insert(0, '10')
+                self.Entry_list_Sin_Sinc[1].insert(0, '1')
+                self.Entry_list_Sin_Sinc[2].insert(0, '-5')
+            ###
 
             self._create_enter_button()
 

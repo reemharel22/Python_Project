@@ -146,6 +146,8 @@ class PlotBox(tk.Tk):
         Starts the animation
         :return:
         """
+        #self._reset_figure()
+        #self.eq.start_plot(self.fig)
         self.step = self.step - 1
         self.animation = self.eq.plot_animation(self.fig) # we have to pass and create the fig
         self.canvas.draw()

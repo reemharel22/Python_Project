@@ -1,7 +1,6 @@
 from equation import Equation
 import numpy as np
 
-
 class Diffusion1D(Equation):
     def __init__(self, max_x, nx, max_t, nt, alpha, b_val, init_val):
         # Representation of sparse matrix and right-hand side
