@@ -410,6 +410,7 @@ class Gui(tk.Tk):
                 self.Entry_list_Sin_Sinc[1].insert(0, '1')
                 self.Entry_list_Sin_Sinc[2].insert(0, '-5')
             self._create_enter_button()
+
     def _create_potential_type_dropdown_list(self):
         omenuwidth2 = len(max(self.potential_type_list, key=len))
         self.title_pot_type = tk.Label(self.sub_frm, text='Choose potential type: ', font=('Helvatical bold', 10))
