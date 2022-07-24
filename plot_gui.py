@@ -18,7 +18,6 @@ import matplotlib.animation as animation
 import matplotlib
 matplotlib.use('TkAgg')
 
-
 class PlotBox(tk.Tk):
     """
     We don't care what equation is solved, just the fact that we have an equation and it has the plot function
@@ -29,8 +28,6 @@ class PlotBox(tk.Tk):
 
     Equation_opts = ['Heat equation', 'Schrodinger equation',
             'One way wave equation']
-
-    visual_opts = ['Image', 'Animation']
 
     Initial_func = ['Gaussian', 'Sinc wave', 'Sine wave']
 
@@ -95,11 +92,11 @@ class PlotBox(tk.Tk):
         This method creates the solve button.
         """
 
-        self.MyButton2 = tk.Button(self.main_frame, text='Plot',
+        self.MyButton2 = tk.Button(self.sub_frm2, text='Plot',
                                    command=self._command_plot_equation)
 
-        self.MyButton2.grid(column=1, row=3, sticky='n', padx=5,
-                            pady=5)
+        self.MyButton2.grid(column=0, row=2, sticky='n', padx=1,
+                            pady=1)
 
     def _create_buttons_of_figure(self):
         """
@@ -109,22 +106,22 @@ class PlotBox(tk.Tk):
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Next plot',
         command=self._command_next_plot)
-        self.MyButton2.grid(column=1, row=1, sticky='n', padx=5,
+        self.MyButton2.grid(column=1, row=1, sticky='n', padx=1,
                             pady=50)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Previous plot',
         command=self._command_prev_plot)
-        self.MyButton2.grid(column=0, row=1, sticky='n', padx=5,
+        self.MyButton2.grid(column=0, row=1, sticky='n', padx=1,
                             pady=50)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Animate',
                                    command=self._command_animate_plot)
-        self.MyButton2.grid(column=1, row=1, sticky='n', padx=5,
+        self.MyButton2.grid(column=1, row=1, sticky='n', padx=1,
                             pady=100)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Pause/Resume',
                                    command=self._command_stop)
-        self.MyButton2.grid(column=0, row=1, sticky='n', padx=5,
+        self.MyButton2.grid(column=0, row=1, sticky='n', padx=1,
                             pady=100)
 
     def _command_plot_equation(self):
@@ -146,6 +143,8 @@ class PlotBox(tk.Tk):
         Starts the animation
         :return:
         """
+        #self._reset_figure()
+        #self.eq.start_plot(self.fig)
         self.step = self.step - 1
         self.animation = self.eq.plot_animation(self.fig) # we have to pass and create the fig
         self.canvas.draw()

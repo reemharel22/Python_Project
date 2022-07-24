@@ -1,7 +1,6 @@
 from equation import Equation
 import numpy as np
 
-
 class Diffusion1D(Equation):
     def __init__(self, max_x, nx, max_t, nt, alpha, b_val, init_val):
         # Representation of sparse matrix and right-hand side
@@ -63,7 +62,6 @@ class Diffusion1D(Equation):
     def update(self):
         self.solutions[self.cycle, :] = self.u_current
         self.cycle = self.cycle + 1
-
         self.u_prev = self.u_current
 
     #

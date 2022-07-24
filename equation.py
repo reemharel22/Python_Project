@@ -1,8 +1,13 @@
 import numpy as np
+import scipy.sparse
+import scipy.linalg
+import scipy
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib import style
 
+# style.use('ggplot')
 
 class Equation:
     """
@@ -50,14 +55,21 @@ class Equation:
         self.ani = animation.FuncAnimation(self.fig, animate, interval=25, blit=False, frames=200, save_count=50)
         return self.ani
 
-    def start_plot(self, fig, xlabel, ylabel):
+    def start_plot(self, fig, xlabel ='Position' , ylabel = 'flux', title='Heat flux vs position'):
         self.step = 1
         self.ax = fig.subplots()
         self.line, = self.ax.plot(self.x, self.solutions[1, :])
+        #self.ax.set_xlim([0, self.x[-1]])
+        #self.ax.set_ylim([0, np.max(self.solutions[:, :])])
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(ylabel)
         plt.xlim([0, self.x[-1]])
         plt.ylim([0, np.max(self.solutions[:, :])])
-        plt.xlabel('Position')
-        plt.ylabel('Flux')
+        #plt.xlabel('Position')
+        #plt.ylabel('Flux')
+        self.ax.set_title(title)
+        self.ax.grid()
+
 
     def plot_step(self, i):
         self.step = self.step + i
@@ -68,9 +80,6 @@ class Equation:
             self.step = 1
             return False
         self.line.set_ydata(self.solutions[self.step, :])
-
-
-
 
 
 
