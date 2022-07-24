@@ -10,7 +10,7 @@ class Wave1D(Equation):
         self.t = np.linspace(0, max_t, nt + 1)
         self.dt = self.t[1] - self.t[0]
         self.nt = nt
-        self.x = np.linspace(0, max_x, nx + 1)
+        self.x = np.linspace(-max_x, max_x, nx + 1)
         self.dx = self.x[1] - self.x[0]
         self.nx = nx
 
@@ -19,8 +19,8 @@ class Wave1D(Equation):
         if init_wave_form == 'Sine wave':
             self.f0 = amplitude * np.sin(wave_vector_sigma * np.pi * self.x / max_x + phase_mu)
         if init_wave_form == 'Sinc wave':
-            self.f0 = amplitude * np.sin(wave_vector_sigma * np.pi * self.x / max_x + phase_mu)/\
-                      wave_vector_sigma * np.pi * self.x / max_x + phase_mu
+            self.f0 = amplitude * np.sin(wave_vector_sigma * np.pi * self.x / max_x + phase_mu)/ \
+                      (wave_vector_sigma * np.pi * self.x / max_x + phase_mu)
         if init_wave_form == 'Gaussian':
             self.f0 = amplitude * np.exp(-1/(2*wave_vector_sigma**2)*(self.x-phase_mu)**2)
 

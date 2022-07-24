@@ -24,10 +24,10 @@ class schrodinger1D(Equation):
             self.f0 = lambda x: np.sin(wave_vector_sigma * np.pi * x / max_x + phase_mu)
             self.f0_squared = lambda x: (np.sin(wave_vector_sigma * np.pi * x / max_x + phase_mu)) ** 2
         if init_wave_form == 'Sinc wave':
-            self.f0 = lambda x: np.sin(wave_vector_sigma * np.pi * x / max_x + phase_mu)/\
-                      wave_vector_sigma * np.pi * x / max_x + phase_mu
-            self.f0_squared = lambda x:(np.sin(wave_vector_sigma * np.pi * x / max_x + phase_mu)/\
-                      wave_vector_sigma * np.pi * x / max_x + phase_mu) ** 2
+            self.f0 = lambda x: np.sin(wave_vector_sigma * np.pi * x / max_x + phase_mu)/ \
+                                (wave_vector_sigma * np.pi * x / max_x + phase_mu)
+            self.f0_squared = lambda x:(np.sin(wave_vector_sigma * np.pi * x / max_x + phase_mu)/ \
+                                        (wave_vector_sigma * np.pi * x / max_x + phase_mu)) ** 2
         if init_wave_form == 'Gaussian':
             self.f0 = lambda x: np.exp(-1/(2*wave_vector_sigma**2)*(x-phase_mu)**2) * np.exp(1j * self.k0 * x)
             self.f0_squared = lambda x: (np.exp(-1/(2*wave_vector_sigma**2)*(x-phase_mu)**2)) ** 2
