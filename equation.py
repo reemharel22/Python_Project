@@ -44,7 +44,7 @@ class Equation:
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
         plt.xlim([0, self.x[-1]])
-        plt.ylim([0, np.max(self.solutions[1:, 1:])])
+        plt.ylim([0, np.max(self.solutions[:, :])])
         self.ax.set_title(title)
         self.ax.grid()
 
@@ -53,7 +53,7 @@ class Equation:
         self.fig = fig
         self.ax = self.fig.add_subplot(111)
         self.set_plot_title_labels(xlabel, ylabel, title)
-        line, = self.ax.plot(self.x, self.solutions[:])
+        line, = self.ax.plot(self.x, self.solutions[1, :])
 
         def animate(i):
             if i >= len(self.solutions):
