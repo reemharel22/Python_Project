@@ -40,11 +40,20 @@ class Equation:
     def solve_time_step(self):
         pass
 
+    def set_plot_title_labels(self, xlabel, ylabel, title):
+        self.ax.set_xlabel(xlabel)
+        self.ax.set_ylabel(ylabel)
+        plt.xlim([0, self.x[-1]])
+        plt.ylim([0, np.max(self.solutions[1:, 1:])])
+        self.ax.set_title(title)
+        self.ax.grid()
+
     # it is common for all 1d equations to do this..
-    def plot_animation(self, fig):
+    def plot_animation(self, fig, xlabel='Position', ylabel='flux', title='Heat flux vs position'):
         self.fig = fig
         self.ax = self.fig.add_subplot(111)
-        line, = self.ax.plot(self.x, self.solutions[1, :])
+        self.set_plot_title_labels(xlabel, ylabel, title)
+        line, = self.ax.plot(self.x, self.solutions[:])
 
         def animate(i):
             if i >= len(self.solutions):
@@ -59,16 +68,7 @@ class Equation:
         self.step = 1
         self.ax = fig.subplots()
         self.line, = self.ax.plot(self.x, self.solutions[1, :])
-        #self.ax.set_xlim([0, self.x[-1]])
-        #self.ax.set_ylim([0, np.max(self.solutions[:, :])])
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(ylabel)
-        plt.xlim([0, self.x[-1]])
-        plt.ylim([0, np.max(self.solutions[:, :])])
-        #plt.xlabel('Position')
-        #plt.ylabel('Flux')
-        self.ax.set_title(title)
-        self.ax.grid()
+        self.set_plot_title_labels(xlabel, ylabel, title)
 
 
     def plot_step(self, i):
