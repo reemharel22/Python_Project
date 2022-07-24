@@ -10,7 +10,10 @@ from matplotlib.figure import Figure
 import default
 import equation
 import diffusion_1d
+import wave_1d
+import schrodinger_1d
 import plot_gui
+
 
 class Gui(tk.Tk):
     PAD = 30
@@ -100,6 +103,8 @@ class Gui(tk.Tk):
     def _make_sub_frame(self):
         """
         This method creates a subframe and places Entries inside.
+        I.e this is the a "communication" layer between the GUI and the user, we define here the labels of each equation
+        and the input fields
         """
         # default:
         self.Chosen_equation = self.Equation_opts[0]
@@ -147,8 +152,6 @@ class Gui(tk.Tk):
 
         self.Entry_label_dict = dict(zip(self.values_to_insert, self.Entry_list))
 
-        #self.Entry_label_dict_wave = dict(zip(self.values_to_insert, self.Entry_list))
-
     def _show_special_entries_and_save_choice(self, e):
         """
         This method builds the unique entries and saves
@@ -162,7 +165,7 @@ class Gui(tk.Tk):
             for i in range(0,len(self.Entry_list)):
                 self.Entry_list[i].delete(0, 'end')
             self.Entry_list[1].insert(0, '400')
-            self.Entry_list[2].insert(0,'20')
+            self.Entry_list[2].insert(0, '20')
             self.Entry_list[4].insert(0, '400')
             self.Entry_list[5].insert(0, '5')
             ###
@@ -208,7 +211,7 @@ class Gui(tk.Tk):
 
             self._create_enter_button()
 
-        elif e == self.Equation_opts[0]: # heat wave!
+        elif e == self.Equation_opts[0]: # heat wave! diffusion
 
             self.drop3.grid_forget()
 
@@ -285,8 +288,9 @@ class Gui(tk.Tk):
     # When you click solve, this is called!
     def _click_solve_equation(self):
         """
-        This method saves the input from the entries.
+        This method saves the input from the entries and creates the appropriate equation class.
         """
+
         try:
             self.initial_condition = self.Entry_list[0].get()
 
@@ -319,9 +323,6 @@ class Gui(tk.Tk):
                 return
             self.eq = diffusion_1d.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
 
-        # Re'em: Shaya, this is logically wrong, if the above if occurs, this if we never occur... its the same if
-        # Please change this..
-        #if self.Chosen_equation == self.Equation_opts[2]:
 
         if (self.Equation_opts[1] or self.Equation_opts[2]) and (self.Chosen_initial_condition_form == 'Sinc wave' or
                                                self.Chosen_initial_condition_form == 'Sine wave'
@@ -362,7 +363,7 @@ class Gui(tk.Tk):
             except:
                 self._error_message("Bad input in equation data. Please insert floats or integers.")
                 return
-            self.eq = equation.Wave1D(max_x, nx, max_t, nt, Velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu)
+            self.eq = wave_1d.Wave1D(max_x, nx, max_t, nt, Velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu)
 
         if self.Chosen_equation == self.Equation_opts[1]: # Schrodinger
             try:
@@ -385,7 +386,7 @@ class Gui(tk.Tk):
             except:
                 self._error_message("Bad input in equation data. Please insert floats or integers.")
                 return
-            self.eq = equation.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, wave_vector_sigma, phase_mu,
+            self.eq = schrodinger_1d.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, wave_vector_sigma, phase_mu,
                                              potential_type)
         self.plot_gui.set_equation(self.eq)
         self.eq.solve()
