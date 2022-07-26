@@ -4,6 +4,7 @@ from equation import Equation
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+
 class controller:
     def __init__(self):
         self.gui = Gui(self)

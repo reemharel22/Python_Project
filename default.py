@@ -2,7 +2,7 @@ Diffusion_default = {
 'Initial condition:': 0.01,
 'Number of Cells (nx):': 50,
 'x_max:': 1.5,
-'Boundry value at x0:': 100.0,
+'Boundary value at x0:': 100.0,
 'Number cycles:': 100,
 'Final time:': 3,
 'Alpha:': 0.01

@@ -40,7 +40,7 @@ class schrodinger1D(Equation):
 
         # Calculation of the Amplitude by the normalization condition and other technical matrix definitions that halp
         # solve the equation.
-        self.I = integrate.quad(self.f0_squared, -max_x, max_x)[0]
+        self.I = integrate.quad(self.f0_squared,  -np.inf, np.inf)[0]
         self.A = (1 / self.I) ** (1/2)
         self.psi_0 = self.A * self.f0(self.x)
         self.F = (1j*self.dt)/((self.dx)**2)
@@ -48,7 +48,7 @@ class schrodinger1D(Equation):
         self.u_prev = np.copy(self.psi_0)
         self.cycle = 0
         self.time_steps = nt
-        self.solutions = np.zeros([nt + 1, self.nx + 1])
+        self.solutions = np.zeros([self.nt + 1, self.nx + 1])
         self.step = 1
         self.J = len(self.x)
         self.T = len(self.t)

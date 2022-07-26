@@ -37,8 +37,14 @@ class Gui(tk.Tk):
     Equation_opts = ('Heat equation', 'Schrodinger equation', 'One way wave equation')
     Initial_func = ('Gaussian', 'Sinc wave', 'Sine wave')
     potential_type_list = ('harmonic potential', 'Gaussian potential')
-    values_to_insert = ('Initial condition:', 'Number of Cells (nx):', 'x_max:', 'Boundry value at x0:',
+    values_to_insert = ('Initial condition:', 'Number of Cells (nx):', 'x_max:', 'Boundary value at x0:',
                         'Number cycles:', 'Final time:', 'Alpha:', 'Velocity:')
+
+    # Dictionaries for default values.
+    default_Schrodinger_dict = {'nx': 400, 'x_max': 20, 'nt': 400, 't_max': 5}
+    default_wave_dict = {'nx': 100, 'x_max': 10, 'nt': 500, 't_max': 30, 'velocity': 0.006}
+    default_heat_dict = {'init': 0.01, 'nx': 50, 'x_max': 1.5, 'b_val': 100.0, 'nt': 100, 't_max': 3, 'alpha': 0.01}
+    default_init_condition = {'amplitude': 10, 'phase/sigma': 1, 'wave_vector/mu': -5}
 
     def __init__(self, controller):
         super().__init__()
@@ -127,10 +133,10 @@ class Gui(tk.Tk):
             for i in range(0, len(self.Entry_list)):
                 if len(self.Entry_list[i].get()) != 0:
                     self.Entry_list[i].delete(0, 'end')
-            self.Entry_list[1].insert(0, '400')
-            self.Entry_list[2].insert(0, '20')
-            self.Entry_list[4].insert(0, '400')
-            self.Entry_list[5].insert(0, '5')
+            self.Entry_list[1].insert(0, self.default_Schrodinger_dict['nx'])
+            self.Entry_list[2].insert(0, self.default_Schrodinger_dict['x_max'])
+            self.Entry_list[4].insert(0, self.default_Schrodinger_dict['nt'])
+            self.Entry_list[5].insert(0, self.default_Schrodinger_dict['t_max'])
 
         elif choice == self.Equation_opts[2]:  # One way wave equation.
             self.solve_button.grid_forget()
@@ -152,11 +158,11 @@ class Gui(tk.Tk):
             for i in range(0, len(self.Entry_list)):
                 if len(self.Entry_list[i].get()) != 0:
                     self.Entry_list[i].delete(0, 'end')
-            self.Entry_list[1].insert(0, '100')
-            self.Entry_list[2].insert(0, '10')
-            self.Entry_list[4].insert(0, '500')
-            self.Entry_list[5].insert(0, '30')
-            self.Entry_list[7].insert(0, '0.006')
+            self.Entry_list[1].insert(0, self.default_wave_dict['nx'])
+            self.Entry_list[2].insert(0, self.default_wave_dict['x_max'])
+            self.Entry_list[4].insert(0, self.default_wave_dict['nt'])
+            self.Entry_list[5].insert(0, self.default_wave_dict['t_max'])
+            self.Entry_list[7].insert(0, self.default_wave_dict['velocity'])
 
         elif choice == self.Equation_opts[0]:  # Heat wave equation.
             self.drop_init_fun.grid_forget()
@@ -194,13 +200,13 @@ class Gui(tk.Tk):
             for i in range(0, len(self.Entry_list)):
                 if len(self.Entry_list[i].get()) != 0:
                     self.Entry_list[i].delete(0, 'end')
-            self.Entry_list[0].insert(0, '0.01')
-            self.Entry_list[1].insert(0, '50')
-            self.Entry_list[2].insert(0, '1.5')
-            self.Entry_list[3].insert(0, '100.0')
-            self.Entry_list[4].insert(0, '100')
-            self.Entry_list[5].insert(0, '3')
-            self.Entry_list[6].insert(0, '0.01')
+            self.Entry_list[0].insert(0, self.default_heat_dict['init'])
+            self.Entry_list[1].insert(0, self.default_heat_dict['nx'])
+            self.Entry_list[2].insert(0, self.default_heat_dict['x_max'])
+            self.Entry_list[3].insert(0, self.default_heat_dict['b_val'])
+            self.Entry_list[4].insert(0, self.default_heat_dict['nt'])
+            self.Entry_list[5].insert(0, self.default_heat_dict['t_max'])
+            self.Entry_list[6].insert(0, self.default_heat_dict['alpha'])
 
     def _create_enter_button(self):
         """
@@ -344,6 +350,7 @@ class Gui(tk.Tk):
                 return
             self.eq = schrodinger_1d.schrodinger1D(max_x, nx, max_t, nt, init_wave_form,amplitude, wave_vector_sigma,
                                                    phase_mu, potential_type)
+
         self.plot_gui.set_equation(self.eq)
         self.eq.solve()
 
@@ -382,9 +389,9 @@ class Gui(tk.Tk):
 
             # Default values.
             if len(self.Entry_list_Gaussian[0].get()) == 0:
-                self.Entry_list_Gaussian[0].insert(0, '10')
-                self.Entry_list_Gaussian[1].insert(0, '1')
-                self.Entry_list_Gaussian[2].insert(0, '-5')
+                self.Entry_list_Gaussian[0].insert(0, self.default_init_condition['amplitude'])
+                self.Entry_list_Gaussian[1].insert(0, self.default_init_condition['phase/sigma'])
+                self.Entry_list_Gaussian[2].insert(0, self.default_init_condition['wave_vector/mu'])
             self._create_enter_button()
         elif self.Chosen_initial_condition_form == 'Sinc wave' or self.Chosen_initial_condition_form == 'Sine wave':
             self.solve_button.grid_forget()
@@ -407,9 +414,9 @@ class Gui(tk.Tk):
                     #self.myEntrySinSinc.insert(0, self.values_to_insert_sin_sinc[i])
             # Default values.
             if len(self.Entry_list_Sin_Sinc[0].get()) == 0:
-                self.Entry_list_Sin_Sinc[0].insert(0, '10')
-                self.Entry_list_Sin_Sinc[1].insert(0, '1')
-                self.Entry_list_Sin_Sinc[2].insert(0, '-5')
+                self.Entry_list_Sin_Sinc[0].insert(0, self.default_init_condition['amplitude'])
+                self.Entry_list_Sin_Sinc[1].insert(0, self.default_init_condition['phase/sigma'])
+                self.Entry_list_Sin_Sinc[2].insert(0, self.default_init_condition['wave_vector/mu'])
             self._create_enter_button()
 
     def _create_potential_type_dropdown_list(self):
