@@ -169,19 +169,21 @@ class Gui(tk.Tk):
             self.title_init_fun.grid_forget()
             self.drop_pot_type.grid_forget()
             self.title_pot_type.grid_forget()
-            if self.Entry_list_Gaussian:
-                for i in range(0, len(self.values_to_insert_Gaussian)):
-                    self.Entry_list_Gaussian[i].grid_forget()
+            #if self.Entry_list_Gaussian:
+            #    for i in range(0, len(self.values_to_insert_Gaussian)):
+            #        self.Entry_list_Gaussian[i].grid_forget()
             if self.Label_list_Gaussian:
                 for i in range(0, len(self.values_to_insert_Gaussian)):
+                    self.Entry_list_Gaussian[i].grid_forget()
                     self.Label_list_Gaussian[i].grid_forget()
                 self.Entry_list_Gaussian.clear()
                 self.Label_list_Gaussian.clear()
-            if self.Entry_list_Sin_Sinc:
-                for i in range(0, len(self.values_to_insert_sin_sinc)):
-                    self.Entry_list_Sin_Sinc[i].grid_forget()
+            #if self.Entry_list_Sin_Sinc:
+            #    for i in range(0, len(self.values_to_insert_sin_sinc)):
+            #        self.Entry_list_Sin_Sinc[i].grid_forget()
             if self.Label_list_Sin_Sinc:
                 for i in range(0, len(self.values_to_insert_sin_sinc)):
+                    self.Entry_list_Sin_Sinc[i].grid_forget()
                     self.Label_list_Sin_Sinc[i].grid_forget()
                 self.Entry_list_Sin_Sinc.clear()
                 self.Label_list_Sin_Sinc.clear()
@@ -224,6 +226,9 @@ class Gui(tk.Tk):
         oMenuWidth = len(max(self.Equation_opts, key=len))
         self.Drop = tk.OptionMenu(self.main_frm, self.Equation_type, *self.Equation_opts,
                                   command=self._show_special_entries_and_save_choice)
+        ###
+        self.Equation_type.set(self.Equation_opts[0])
+        ###
         self.Drop.config(width=oMenuWidth)
         self.Drop.grid(column=0, row=1)
 
@@ -251,7 +256,7 @@ class Gui(tk.Tk):
                 max_t = float(self.Entry_label_dict["Final time:"].get())
                 nt = int(self.Entry_label_dict["Number cycles:"].get())
                 alpha = float(self.Entry_label_dict["Alpha:"].get())
-                b_val = float(self.Entry_label_dict["Boundry value at x0:"].get())
+                b_val = float(self.Entry_label_dict["Boundary value at x0:"].get())
                 init_val = float(self.Entry_label_dict["Initial condition:"].get())
             except:
                 self._error_message("Bad input in equation data. Please insert floats or integers.")
@@ -312,12 +317,27 @@ class Gui(tk.Tk):
                                      amplitude, wave_vector_sigma, phase_mu)
         if self.Chosen_equation == self.Equation_opts[1]:  # Schrodinger equation.
             try:
-                max_x = float(self.Entry_label_dict["x_max:"].get())
-                nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
                 max_t = float(self.Entry_label_dict["Final time:"].get())
                 nt = int(self.Entry_label_dict["Number cycles:"].get())
+                assert (0 < max_t and 0 < nt and nt / max_t < 150)
+            except ValueError:
+                self._error_message("Bad input in equation data. Please insert floats or integers.")
+            except AssertionError:
+                self._error_message('The values of Final time and Number cycles must satisfy the conditions: '
+                                    '0 < Final time, 0 < Number cycles and nt/max_t < 150')
+            try:
+                max_x = float(self.Entry_label_dict["x_max:"].get())
+                nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
                 init_wave_form = self.Chosen_initial_condition_form
                 potential_type = self.Chosen_potential_type
+                # Assertion conditions that necessary to get a reasonable solution.
+                assert(0 < max_x < nx/2)
+                assert(0 < nx < 1000)
+            except ValueError:
+                self._error_message("Bad input in equation data. Please insert floats or integers.")
+            except AssertionError:
+                self._error_message('The values of x_max and nx must to be between [0,nx/2],[0,1000], respectively')
+            try:
                 if init_wave_form == 'Gaussian':
                     amplitude = float(self.Amplitude_Gaussian)
                     wave_vector_sigma = float(self.Sigma)

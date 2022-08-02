@@ -4,6 +4,8 @@ import diffusion_1d
 import schrodinger_1d
 import wave_1d
 import numpy as np
+from gui import Gui
+from main import controller
 
 class TestSchrodinger1d(unittest.TestCase):
     def setUp(self) -> None:
@@ -34,7 +36,7 @@ class TestSchrodinger1d(unittest.TestCase):
         msg = 'Schrodinger is normalized!'
         self.assertAlmostEqual(first, second, places, msg, delta=None)
 
-class Test_wave_1d(unittest.TestCase):
+class TestWave1d(unittest.TestCase):
     def setUp(self) -> None:
         self.wave_test = wave_1d.Wave1D(10, 100, 30, 500, 0.006, 'Sinc wave',
                                      10, 1, -5)

@@ -7,7 +7,7 @@ class schrodinger1D(Equation):
     This class solves the one-dimensional Schrodinger equation by the Crank Nicolson method. This is the only method
     that satisfy Unitary propagator with necessary to keep the normalization of the wave function for all time.
     """
-    def __init__(self, max_x, nx, max_t, nt, init_wave_form,amplitude, wave_vector_sigma, phase_mu, potential_type):
+    def __init__(self, max_x, nx, max_t, nt, init_wave_form, amplitude, wave_vector_sigma, phase_mu, potential_type):
         # Variables.
         self.v0 = amplitude
         self.k0 = 1
@@ -40,7 +40,7 @@ class schrodinger1D(Equation):
 
         # Calculation of the Amplitude by the normalization condition and other technical matrix definitions that halp
         # solve the equation.
-        self.I = integrate.quad(self.f0_squared,  -np.inf, np.inf)[0]
+        self.I = integrate.quad(self.f0_squared,  -max_x, max_x)[0]
         self.A = (1 / self.I) ** (1/2)
         self.psi_0 = self.A * self.f0(self.x)
         self.F = (1j*self.dt)/((self.dx)**2)

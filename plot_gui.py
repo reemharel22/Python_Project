@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import default as defaults
 import equation
-from matplotlib.backends.backend_tkagg import (
+from matplotlib.backends.backend_tkagg import(
     FigureCanvasTkAgg,
     FigureCanvasTk,
     NavigationToolbar2Tk
@@ -86,8 +86,8 @@ class PlotBox(tk.Tk):
         self.MyButton2 = tk.Button(self.sub_frm2, text='Plot',
                                    command=self._command_plot_equation)
 
-        self.MyButton2.grid(column=0, row=2, sticky='n', padx=1,
-                            pady=1)
+        self.MyButton2.grid(column=0, row=1, sticky='n', padx=1,
+                            pady=150)
 
     def _create_buttons_of_figure(self):
         """
@@ -98,22 +98,22 @@ class PlotBox(tk.Tk):
         self.MyButton2 = tk.Button(self.sub_frm2, text='Next plot',
         command=self._command_next_plot)
         self.MyButton2.grid(column=1, row=1, sticky='n', padx=1,
-                            pady=50)
+                            pady=100)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Previous plot',
         command=self._command_prev_plot)
         self.MyButton2.grid(column=0, row=1, sticky='n', padx=1,
-                            pady=50)
+                            pady=100)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Animate',
                                    command=self._command_animate_plot)
         self.MyButton2.grid(column=1, row=1, sticky='n', padx=1,
-                            pady=100)
+                            pady=50)
 
         self.MyButton2 = tk.Button(self.sub_frm2, text='Pause/Resume',
                                    command=self._command_stop)
         self.MyButton2.grid(column=0, row=1, sticky='n', padx=1,
-                            pady=100)
+                            pady=50)
 
     def _command_plot_equation(self):
         """
