@@ -18,8 +18,9 @@ class Gui(tk.Tk):
     """
     This class is the gui interface for the Visuquation project.
     """
+    #tk.config(bg='blue')
+
     # Variables and empty lists that are used to design the user interface.
-    PAD = 30
     Chosen_equation = ''
     Chosen_initial_condition_form = ''
     Entry_list = []
@@ -48,6 +49,7 @@ class Gui(tk.Tk):
 
     def __init__(self, controller):
         super().__init__()
+        self.configure(bg='black')  # Set background color.
         self.title('Visuquation User Interface')
         self._make_main_frame()  # Creation of the main frame of the gui.
 
@@ -73,15 +75,18 @@ class Gui(tk.Tk):
         """
         This method creates the main frame.
         """
-        self.main_frm = ttk.Frame(self)
-        self.main_frm.grid(padx=self.PAD, pady=self.PAD)
+        self.main_frm = tk.Frame(self)
+        self.main_frm.grid(padx=30, pady=30)
+        #s = ttk.style()
+        #s.configure('self.main_frm', background="white")
+        self.main_frm.config(bg="black")
 
     def _make_sub_frame(self):
         """
         This method creates a subframe and places Entries inside.
         """
         self.Chosen_equation = self.Equation_opts[0]
-        self.sub_frm = tk.Frame(self.main_frm, highlightbackground="black", highlightthickness=2, padx=5, pady=5)
+        self.sub_frm = tk.Frame(self.main_frm, highlightbackground="black", highlightthickness=2, padx=2, pady=5)
 
         self.Title = tk.Label(self.sub_frm,
                               text='Please enter the following values:', font=('Helvatical bold', 10))
@@ -101,7 +106,7 @@ class Gui(tk.Tk):
             self.myEntry.insert(0, default.Diffusion_default[self.values_to_insert[i]])
             self.Entry_list.append(self.myEntry)
 
-        self.myEntry = tk.Entry(self.sub_frm, borderwidth=3, width=25)
+        self.myEntry = tk.Entry(self.sub_frm, borderwidth=1, width=25)
         self.labelDir = tk.Label(self.sub_frm, text=self.values_to_insert[-1])
         self.Label_list.append(self.labelDir)
         self.myEntry.insert(0, self.values_to_insert[-1])
@@ -146,8 +151,8 @@ class Gui(tk.Tk):
             self.Label_list[0].grid_forget()
             self.Entry_list[3].grid_forget()
             self.Label_list[3].grid_forget()
-            self.Label_list[-1].grid(row=8,column=0, padx=0, pady=3, sticky=tk.W)
-            self.Entry_list[-1].grid(row=8,column=1, padx=5, pady=5)
+            self.Label_list[-1].grid(row=8, column=0, padx=0, pady=3, sticky=tk.W)
+            self.Entry_list[-1].grid(row=8, column=1, padx=0, pady=3, sticky=tk.W)
             self.Entry_list[-2].grid_forget()
             self.Label_list[-2].grid_forget()
             self.drop_init_fun.grid(column=1, row=10)
@@ -169,18 +174,12 @@ class Gui(tk.Tk):
             self.title_init_fun.grid_forget()
             self.drop_pot_type.grid_forget()
             self.title_pot_type.grid_forget()
-            #if self.Entry_list_Gaussian:
-            #    for i in range(0, len(self.values_to_insert_Gaussian)):
-            #        self.Entry_list_Gaussian[i].grid_forget()
             if self.Label_list_Gaussian:
                 for i in range(0, len(self.values_to_insert_Gaussian)):
                     self.Entry_list_Gaussian[i].grid_forget()
                     self.Label_list_Gaussian[i].grid_forget()
                 self.Entry_list_Gaussian.clear()
                 self.Label_list_Gaussian.clear()
-            #if self.Entry_list_Sin_Sinc:
-            #    for i in range(0, len(self.values_to_insert_sin_sinc)):
-            #        self.Entry_list_Sin_Sinc[i].grid_forget()
             if self.Label_list_Sin_Sinc:
                 for i in range(0, len(self.values_to_insert_sin_sinc)):
                     self.Entry_list_Sin_Sinc[i].grid_forget()
@@ -188,12 +187,12 @@ class Gui(tk.Tk):
                 self.Entry_list_Sin_Sinc.clear()
                 self.Label_list_Sin_Sinc.clear()
             self.solve_button.grid_forget()
-            self.Entry_list[0].grid(row=1, column=1, padx=0, pady=3)
+            self.Entry_list[0].grid(row=1, column=1, padx=0, pady=3, sticky=tk.W)
             self.Label_list[0].grid(row=1, column=0, padx=0, pady=3, sticky=tk.W)
-            self.Entry_list[3].grid(row=4, column=1, padx=0, pady=3)
+            self.Entry_list[3].grid(row=4, column=1, padx=0, pady=3, sticky=tk.W)
             self.Label_list[3].grid(row=4, column=0, padx=0, pady=3, sticky=tk.W)
             self.Label_list[-2].grid(row=8, column=0, padx=0, pady=3, sticky=tk.W)
-            self.Entry_list[-2].grid(row=8, column=1, padx=5, pady=5)
+            self.Entry_list[-2].grid(row=8, column=1, padx=0, pady=3, sticky=tk.W)
             self.Entry_list[-1].grid_forget()
             self.Label_list[-1].grid_forget()
             self._create_enter_button()
@@ -245,7 +244,7 @@ class Gui(tk.Tk):
             self.Number_of_cycles = self.Entry_list[4].get()
             self.Final_time = self.Entry_list[5].get()
             self.Alpha = self.Entry_list[6].get()
-        except:
+        except ValueError:
             self._error_message("Error in Equation form - did you miss an item?")
             return
 
@@ -258,7 +257,7 @@ class Gui(tk.Tk):
                 alpha = float(self.Entry_label_dict["Alpha:"].get())
                 b_val = float(self.Entry_label_dict["Boundary value at x0:"].get())
                 init_val = float(self.Entry_label_dict["Initial condition:"].get())
-            except:
+            except ValueError:
                 self._error_message("Bad input in equation data. Please insert floats or integers.")
                 return
             self.eq = diffusion_1d.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
@@ -277,12 +276,29 @@ class Gui(tk.Tk):
             self.Mu = self.Entry_list_Gaussian[2].get()
 
         if self.Chosen_equation == self.Equation_opts[2]:  # One way wave equation.
-            self.Velocity = self.Entry_list[7].get()
+            #self.Velocity = self.Entry_list[7].get()
+            try:
+                nt = int(self.Entry_label_dict["Number cycles:"].get())
+                max_t = float(self.Entry_label_dict["Final time:"].get())
+                # Assertion conditions that necessary to get a reasonable solution.
+                assert (0 < max_t and 30 <= nt <= 20000 and nt / max_t < 150)
+            except ValueError:
+                self._error_message('Bad input in data, Number cycles must be integer and Final time must be float'
+                                    ' (or integer).')
+            except AssertionError:
+                self._error_message('The values of Final time and Number cycles must satisfy the conditions: '
+                                    '0 < Final time, 30 <= Number cycles <= 20000 and Number cycles/Final time < 150.')
             try:
                 max_x = float(self.Entry_label_dict["x_max:"].get())
                 nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
-                max_t = float(self.Entry_label_dict["Final time:"].get())
-                nt = int(self.Entry_label_dict["Number cycles:"].get())
+                # Assertion conditions that necessary to get a reasonable solution.
+                assert (0 < max_x < nx / 2)
+                assert (30 < nx < 1000)
+            except ValueError:
+                self._error_message('Bad input in data, nx must be integer and x_max must be float (or integer).')
+            except AssertionError:
+                self._error_message('The values of x_max and nx must to be between [0,nx/2],[30,1000], respectively.')
+            try:
                 velocity = float(self.Entry_label_dict["Velocity:"].get())
                 init_wave_form = self.Chosen_initial_condition_form
                 if init_wave_form == 'Gaussian':
@@ -319,12 +335,13 @@ class Gui(tk.Tk):
             try:
                 max_t = float(self.Entry_label_dict["Final time:"].get())
                 nt = int(self.Entry_label_dict["Number cycles:"].get())
-                assert (0 < max_t and 0 < nt and nt / max_t < 150)
+                assert (0 < max_t and 30 <= nt <= 20000 and nt / max_t < 150)
             except ValueError:
-                self._error_message("Bad input in equation data. Please insert floats or integers.")
+                self._error_message('Bad input in data, Number cycles must be integer and Final time must be float'
+                                    ' (or integer).')
             except AssertionError:
                 self._error_message('The values of Final time and Number cycles must satisfy the conditions: '
-                                    '0 < Final time, 0 < Number cycles and nt/max_t < 150')
+                                    '0 < Final time, 30 <= Number cycles <= 20000 and Number cycles/Final time < 150')
             try:
                 max_x = float(self.Entry_label_dict["x_max:"].get())
                 nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
@@ -332,11 +349,11 @@ class Gui(tk.Tk):
                 potential_type = self.Chosen_potential_type
                 # Assertion conditions that necessary to get a reasonable solution.
                 assert(0 < max_x < nx/2)
-                assert(0 < nx < 1000)
+                assert(30 < nx < 1000)
             except ValueError:
-                self._error_message("Bad input in equation data. Please insert floats or integers.")
+                self._error_message('Bad input in data, nx must be integer and x_max must be float (or integer).')
             except AssertionError:
-                self._error_message('The values of x_max and nx must to be between [0,nx/2],[0,1000], respectively')
+                self._error_message('The values of x_max and nx must to be between [0,nx/2],[30,1000], respectively')
             try:
                 if init_wave_form == 'Gaussian':
                     amplitude = float(self.Amplitude_Gaussian)

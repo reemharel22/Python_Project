@@ -57,7 +57,7 @@ class PlotBox(tk.Tk):
         """
         self.sub_frm2 = tk.Frame(self.main_frame, highlightbackground="black",
                                  highlightthickness=2, padx=defaults.subPAD,
-                                 pady=defaults.subPAD)
+                                 pady=defaults.subPAD_out)
         self.Title = tk.Label(self.sub_frm2,
                               text='Visualization',
                               font=('Helvatical bold', 25))

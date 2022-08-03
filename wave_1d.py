@@ -58,4 +58,7 @@ class Wave1D(Equation):
     def start_plot(self, fig):
         super().start_plot(fig, xlabel='x', ylabel= '$\psi(x)$', title='Wave function vs position')
 
+    def plot_animation(self, fig):
+        super().plot_animation(fig, xlabel='x', ylabel='$\psi(x)$', title='Wave function vs position')
+
 
