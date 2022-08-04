@@ -44,7 +44,9 @@ class Equation:
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
         plt.xlim([0, self.x[-1]])
-        plt.ylim([0, np.max(self.solutions[:, :])])
+        #plt.ylim([0, np.max(self.solutions[:, :])])
+        self.ax.set_ylim((np.min(1.5*self.solutions[:, :]),np.max(1.5*self.solutions[:, :])))
+        #self.ax.set_xlim([0, self.x[-1]])
         self.ax.set_title(title)
         self.ax.grid()
 

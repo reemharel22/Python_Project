@@ -121,23 +121,25 @@ class PlotBox(tk.Tk):
         :return: nothing
         """
         try:
-            self.step = 0 # reset...
+            self.step = 0  # reset...
             self._reset_figure()
             self.eq.start_plot(self.fig)
             self.canvas.draw()
         except:
-            self._error_message("Failed to animate")
-
+            self._error_message("Failed to plot.")
 
     def _command_animate_plot(self):
-        """
-        Starts the animation
-        :return:
-        """
-        self._reset_figure(self.step)
-        self.step = self.step - 1
-        self.animation = self.eq.plot_animation(self.fig) # we have to pass and create the fig
-        self.canvas.draw()
+        try:
+            """
+            Starts the animation
+            :return:
+            """
+            self._reset_figure(self.step)
+            self.step = self.step - 1
+            self.animation = self.eq.plot_animation(self.fig)  # we have to pass and create the fig
+            self.canvas.draw()
+        except:
+            self._error_message("Failed to animate.")
 
     def _command_stop(self):
         if self.animation:
@@ -147,6 +149,8 @@ class PlotBox(tk.Tk):
             else:
                 self.animation.event_source.stop()
                 self.stop = True
+        else:
+            self._error_message("Are you sure you clicked solve and started plotting?")
 
     def _command_next_plot(self):
         """

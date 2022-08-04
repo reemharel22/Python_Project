@@ -64,7 +64,10 @@ class Diffusion1D(Equation):
         self.cycle = self.cycle + 1
         self.u_prev = self.u_current
 
-    #
     def start_plot(self, fig):
         super().start_plot(fig, xlabel='Position', ylabel='Flux')
+
+    def plot_animation(self, fig):
+        return super().plot_animation(fig, xlabel='Position', ylabel='Flux',
+                                      title='Heat flux vs position')
 

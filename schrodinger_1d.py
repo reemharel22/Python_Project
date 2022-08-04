@@ -76,4 +76,6 @@ class schrodinger1D(Equation):
         super().start_plot(fig, xlabel='x', ylabel='$|\psi(x)|^2$', title='Probability amplitude vs position')
 
     def plot_animation(self, fig):
-        super().plot_animation(fig, xlabel='x', ylabel='$|\psi(x)|^2$', title='Probability amplitude vs position')
+        return super().plot_animation(fig, xlabel='x', ylabel='$|\psi(x)|^2$',
+                                      title='Probability amplitude vs position')
+

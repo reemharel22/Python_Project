@@ -3,7 +3,7 @@ import numpy as np
 
 class Wave1D(Equation):
     """
-    This class solves the one-dimensional and one directional wave equation by the Euler method.
+    This class solves the one-dimensional and directional wave equation by the Euler method.
     """
     def __init__(self, max_x, nx, max_t, nt, velocity, init_wave_form, amplitude, wave_vector_sigma, phase_mu):
         # Variables.
@@ -59,6 +59,7 @@ class Wave1D(Equation):
         super().start_plot(fig, xlabel='x', ylabel= '$\psi(x)$', title='Wave function vs position')
 
     def plot_animation(self, fig):
-        super().plot_animation(fig, xlabel='x', ylabel='$\psi(x)$', title='Wave function vs position')
+        return super().plot_animation(fig, xlabel='x', ylabel='$\psi(x)$',
+                                      title='Wave function vs position')
 
 
