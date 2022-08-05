@@ -40,6 +40,8 @@ class Gui(tk.Tk):
     nx_max_dif = 2000
     nx_min_dif = 10
     init_val_min = 0
+    stability_wave_lower_bound = 0
+    stability_wave_upper_bound = 1
 
     # Variables and empty lists that are used to create the user interface.
     Chosen_potential_type = ''
@@ -435,7 +437,6 @@ class Gui(tk.Tk):
                                 f'>= {self.max_t_min_dif}, ({self.alpha_min}, {self.alpha_max}) respectively. '
                                 f'Also, nt/max_t >= {self.min_ratio_time_dif} and nx/max_x must to be inside the '
                                 f'range: ({self.min_ratio_dif}, {self.max_ratio_dif}).')
-            return self.eq
 
     def solve_clicked_when_wave_chosen(self):
         """
@@ -475,6 +476,9 @@ class Gui(tk.Tk):
         try:
             velocity = float(self.Entry_label_dict["Velocity:"].get())
             init_wave_form = self.Chosen_initial_condition_form
+            # Euler's method stability condition.
+            assert (self.stability_wave_lower_bound < velocity*(max_t/max_x)*((nx+1)/(nt+1)) <=
+                    self.stability_wave_upper_bound)
             if init_wave_form == 'Gaussian':
                 amplitude = float(self.Amplitude_Gaussian)
                 wave_vector_sigma = float(self.Sigma)
@@ -501,14 +505,15 @@ class Gui(tk.Tk):
                 self._error_message(f'The values of Amplitude,sigma, Mu and Velocity must to be between !=0,'
                                     f' (-{self.wave_vector_sigma_max_gauss_wave},'
                                     f' {self.wave_vector_sigma_max_gauss_wave}), (-x_max, x_max),'
-                                    f' [{self.velocity_min}, {self.velocity_max}) respectively')
+                                    f' [{self.velocity_min}, {self.velocity_max}) respectively. Also, the known '
+                                    f'stability condition must be true.')
             if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
                 self._error_message(f'The values of Amplitude, Phase, Wave vector and Velocity must to be between'
                                     f' > 0, [-x_max, x_max], (-{self.wave_vector_sigma_max_sin_sinc_wave},'
                                     f'{self.wave_vector_sigma_max_sin_sinc_wave}), [{self.velocity_min},'
-                                    f'{self.velocity_max}) respectively')
+                                    f'{self.velocity_max}) respectively. Also, the known stability condition must be'
+                                    f' true')
                 return None
-            return
         self.eq = wave_1d.Wave1D(max_x, nx, max_t, nt, velocity, init_wave_form,
                                  amplitude, wave_vector_sigma, phase_mu)
 
@@ -587,7 +592,6 @@ class Gui(tk.Tk):
                                     f' (-{self.wave_vector_sigma_max_sin_sinc_sh},'
                                     f' {self.wave_vector_sigma_max_sin_sinc_sh}) respectively')
                 return None
-            return
         self.eq = schrodinger_1d.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, amplitude, wave_vector_sigma,
                                                phase_mu, potential_type)
 

@@ -16,3 +16,4 @@ class controller:
 if __name__ == '__main__':
     Equation = controller()
     Equation.main()
+
