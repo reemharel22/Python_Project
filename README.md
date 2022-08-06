@@ -6,9 +6,8 @@ alternately, to plot each time step separately with the ability to view the next
 to the solution, choose the initial condition, etc.
 # Liberies
 - numpy
-- matplotlib.pyplot
-- matplotlib.animation
-- scipy.integrate
+- matplotlib
+- scipy
 - tkinter
 # Run and use the project
 - Run main
