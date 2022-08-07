@@ -6,9 +6,8 @@ alternately, to plot each time step separately with the ability to view the next
 to the solution, choose the initial condition, etc.
 # Liberies
 - numpy
-- matplotlib.pyplot
-- matplotlib.animation
-- scipy.integrate
+- matplotlib
+- scipy
 - tkinter
 # Run and use the project
 - Run main
@@ -29,6 +28,7 @@ to the solution, choose the initial condition, etc.
 - Avoid many actions and fast pressings on the GUI buttons, particularly the "solve equation" button. If you do so, the program will possibly work
   a little bit slow.
 - If the program works slow, stop it and then run again.
+- The value of "Amplitude" in the Schrodinger equation refers to the amplitude of the potential (not the wave function).
 - Enjoy and have a profitable experience!.  
 # Producers
 Reem Harel and Shaya Kahn.
