@@ -8,7 +8,7 @@ import plot_gui
 
 class Gui(tk.Tk):
     """
-    Welcome to Gui, this class is the gui interface for the Visuquation project.
+    Welcome to Gui. this class is the gui interface for the Visuquation project.
     """
     # Assertion checks Variables.
     max_t_min = 0
@@ -137,8 +137,8 @@ class Gui(tk.Tk):
 
     def _show_special_entries_and_save_choice(self, choice):
         """
-        This method builds the unique entries and the second sub frame structure by calling the right function according
-         to the option manu choice by the user.
+        This method builds the unique entries and the second sub-frame structure by calling the correct function
+        according to the option menu choice by the user.
         """
         self.Chosen_equation = self.Equation_type.get()
         if choice == self.Equation_opts[1]:  # Schrodinger equation.
@@ -157,7 +157,7 @@ class Gui(tk.Tk):
 
     def _make_drop_down_list(self):
         """
-        This method creates a dropdown list to choose the equation type.
+        This method creates a drop-down list to choose the equation type.
         """
         self.title_choose_eq = tk.Label(self.main_frm, text='Choose equation: ', font=('Helvatical bold', 10))
         self.title_choose_eq.grid(column=0, row=0, padx=5, pady=5)
@@ -221,7 +221,7 @@ class Gui(tk.Tk):
 
     def _get_from_initial_func_drop_down_list(self, arbitrary_init):
         """
-        This method fits the relevant frame according to the initial condition option manu choice of the user by calling
+        This method fits the relevant frame according to the initial condition option menu choice of the user by calling
         the relevant function.
         """
         self.Chosen_initial_condition_form = self.init_cond.get()
@@ -232,7 +232,7 @@ class Gui(tk.Tk):
 
     def _create_potential_type_dropdown_list(self):
         """
-        This method creates the potential type option manu.
+        This method creates the potential type option menu.
         """
         omenuwidth2 = len(max(self.potential_type_list, key=len))
         self.title_pot_type = tk.Label(self.sub_frm, text='Choose potential type: ', font=('Helvatical bold', 10))
@@ -244,13 +244,14 @@ class Gui(tk.Tk):
 
     def _get_from_potential_type_drop_down_list(self, arbitrary_pot):
         """
-        This method gets the potential type from the relevant option manu.
+        This method gets the potential type from the relevant option menu.
         """
         self.Chosen_potential_type = self.pot_type.get()
 
     def choose_schrodinger(self):
         """
-        This method is called when the user choose schrodinger equation at the option manu and fits the gui accordingly.
+        This method is called when the user chooses the Schrodinger equation at the option menu and fits the gui
+        accordingly.
         """
         self.solve_button.grid_forget()
         self.Entry_list[0].grid_forget()
@@ -278,7 +279,7 @@ class Gui(tk.Tk):
 
     def choose_wave(self):
         """
-        This method is called when the user choose wave equation at the option manu and fits the gui accordingly.
+        This method is called when the user chooses the wave equation at the option menu and fits the gui accordingly.
         """
         self.solve_button.grid_forget()
         self.drop_pot_type.grid_forget()
@@ -307,7 +308,7 @@ class Gui(tk.Tk):
 
     def choose_heat(self):
         """
-        This method is called when the user choose heat equation at the option manu and fits the gui accordingly.
+        This method is called when the user chooses the heat equation at the option menu and fits the gui accordingly.
         """
         self.drop_init_fun.grid_forget()
         self.title_init_fun.grid_forget()
@@ -350,7 +351,7 @@ class Gui(tk.Tk):
 
     def choose_gaussian(self):
         """
-        This method is called when the user choose gaussian initial condition at the option manu and fits the gui
+        This method is called when the user chooses the Gaussian initial condition at the option menu and fits the gui
         accordingly.
         """
         self.solve_button.grid_forget()
@@ -379,7 +380,7 @@ class Gui(tk.Tk):
 
     def choose_sin_sinc(self):
         """
-        This method is called when the user choose sin or sinc initial condition at the option manu and fits the gui
+        This method is called when the user chooses the sin or sinc initial condition at the option menu and fits the gui
         accordingly.
         """
         self.solve_button.grid_forget()
@@ -408,7 +409,7 @@ class Gui(tk.Tk):
 
     def solve_clicked_when_heat_chosen(self):
         """
-        This method is called when the user choose heat equation and click solve equation, this method checks the
+        This method is called when the user chooses the heat equation and clicks "solve equation". This method checks the
         input related to this specific equation.
         """
         try:
@@ -440,8 +441,8 @@ class Gui(tk.Tk):
 
     def solve_clicked_when_wave_chosen(self):
         """
-        This method is called when the user choose wave equation and click solve equation, this method checks the
-        input related to this specific equation.
+        This method is called when the user chooses the wave equation and clicks "solve equation", this method checks
+        the input related to this specific equation.
         """
         if self.Chosen_initial_condition_form == '':
             self._error_message('you have to set the initial condition from the relevant option menu.')
@@ -519,7 +520,7 @@ class Gui(tk.Tk):
 
     def solve_clicked_when_schrodinger_chosen(self):
         """
-        This method is called when the user choose schrodinger equation and click solve equation, this method checks the
+        This method is called when the user chooses the Schrodinger equation and clicks "solve equation". This method checks the
         input related to this specific equation.
         """
         if self.Chosen_initial_condition_form == '':
@@ -594,14 +595,3 @@ class Gui(tk.Tk):
                 return None
         self.eq = schrodinger_1d.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, amplitude, wave_vector_sigma,
                                                phase_mu, potential_type)
-
-
-
-
-
-
-
-
-
-
-

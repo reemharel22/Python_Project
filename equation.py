@@ -82,6 +82,3 @@ class Equation:
             self.step = 1
             return False
         self.line.set_ydata(self.solutions[self.step, :])
-
-
-

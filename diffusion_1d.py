@@ -70,4 +70,3 @@ class Diffusion1D(Equation):
     def plot_animation(self, fig):
         return super().plot_animation(fig, xlabel='Position', ylabel='Flux',
                                       title='Heat flux vs position')
-

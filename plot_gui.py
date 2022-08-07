@@ -176,4 +176,3 @@ class PlotBox(tk.Tk):
 
     def _error_message(self, message):
         messagebox.showerror("Error", message)
-
