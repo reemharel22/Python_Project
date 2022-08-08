@@ -10,39 +10,6 @@ class Gui(tk.Tk):
     """
     Welcome to Gui. this class is the gui interface for the Visuquation project.
     """
-    # Assertion checks Variables.
-    max_t_min = 0
-    nt_min = 30
-    nt_max = 20000
-    max_ratio = 150
-    max_x_min = 0
-    nx_min = 30
-    nx_max = 1000
-    wave_vector_sigma_max_gauss_wave = 5
-    wave_vector_sigma_max_sin_sinc_wave = 15
-    wave_vector_sigma_max_gauss_sh = 5
-    wave_vector_sigma_max_sin_sinc_sh = 10
-    velocity_min = 0
-    velocity_max = 0.01
-    phase_mu_max = 15
-    amplitude_max = 100
-    amplitude_min = 0
-    min_ratio_time_dif = 20
-    min_ratio_dif = 20
-    max_ratio_dif = 50
-    nt_max_dif = 400
-    nt_min_dif = 10
-    max_t_min_dif = 1
-    b_val_min = 1
-    b_val_max = 1000
-    alpha_min = 0.001
-    alpha_max = 0.01
-    nx_max_dif = 2000
-    nx_min_dif = 10
-    init_val_min = 0
-    stability_wave_lower_bound = 0
-    stability_wave_upper_bound = 1
-
     # Variables and empty lists that are used to create the user interface.
     Chosen_potential_type = ''
     Chosen_equation = ''
@@ -64,12 +31,6 @@ class Gui(tk.Tk):
     potential_type_list = ('harmonic potential', 'Gaussian potential')
     values_to_insert = ('Initial condition:', 'Number of Cells (nx):', 'x_max:', 'Boundary value at x0:',
                         'Number cycles:', 'Final time:', 'Alpha:', 'Velocity:')
-
-    # Dictionaries for default values.
-    default_Schrodinger_dict = {'nx': 400, 'x_max': 20, 'nt': 400, 't_max': 5}
-    default_wave_dict = {'nx': 100, 'x_max': 10, 'nt': 500, 't_max': 30, 'velocity': 0.006}
-    default_heat_dict = {'init': 0.01, 'nx': 50, 'x_max': 1.5, 'b_val': 100.0, 'nt': 100, 't_max': 3, 'alpha': 0.01}
-    default_init_condition = {'amplitude': 10, 'phase/sigma': 1, 'wave_vector/mu': -5}
 
     def __init__(self, controller):
         super().__init__()
@@ -272,10 +233,10 @@ class Gui(tk.Tk):
         for i in range(0, len(self.Entry_list)):
             if len(self.Entry_list[i].get()) != 0:
                 self.Entry_list[i].delete(0, 'end')
-        self.Entry_list[1].insert(0, self.default_Schrodinger_dict['nx'])
-        self.Entry_list[2].insert(0, self.default_Schrodinger_dict['x_max'])
-        self.Entry_list[4].insert(0, self.default_Schrodinger_dict['nt'])
-        self.Entry_list[5].insert(0, self.default_Schrodinger_dict['t_max'])
+        self.Entry_list[1].insert(0, default.default_Schrodinger_dict['nx'])
+        self.Entry_list[2].insert(0, default.default_Schrodinger_dict['x_max'])
+        self.Entry_list[4].insert(0, default.default_Schrodinger_dict['nt'])
+        self.Entry_list[5].insert(0, default.default_Schrodinger_dict['t_max'])
 
     def choose_wave(self):
         """
@@ -300,11 +261,11 @@ class Gui(tk.Tk):
         for i in range(0, len(self.Entry_list)):
             if len(self.Entry_list[i].get()) != 0:
                 self.Entry_list[i].delete(0, 'end')
-        self.Entry_list[1].insert(0, self.default_wave_dict['nx'])
-        self.Entry_list[2].insert(0, self.default_wave_dict['x_max'])
-        self.Entry_list[4].insert(0, self.default_wave_dict['nt'])
-        self.Entry_list[5].insert(0, self.default_wave_dict['t_max'])
-        self.Entry_list[7].insert(0, self.default_wave_dict['velocity'])
+        self.Entry_list[1].insert(0, default.default_wave_dict['nx'])
+        self.Entry_list[2].insert(0, default.default_wave_dict['x_max'])
+        self.Entry_list[4].insert(0, default.default_wave_dict['nt'])
+        self.Entry_list[5].insert(0, default.default_wave_dict['t_max'])
+        self.Entry_list[7].insert(0, default.default_wave_dict['velocity'])
 
     def choose_heat(self):
         """
@@ -341,13 +302,13 @@ class Gui(tk.Tk):
         for i in range(0, len(self.Entry_list)):
             if len(self.Entry_list[i].get()) != 0:
                 self.Entry_list[i].delete(0, 'end')
-        self.Entry_list[0].insert(0, self.default_heat_dict['init'])
-        self.Entry_list[1].insert(0, self.default_heat_dict['nx'])
-        self.Entry_list[2].insert(0, self.default_heat_dict['x_max'])
-        self.Entry_list[3].insert(0, self.default_heat_dict['b_val'])
-        self.Entry_list[4].insert(0, self.default_heat_dict['nt'])
-        self.Entry_list[5].insert(0, self.default_heat_dict['t_max'])
-        self.Entry_list[6].insert(0, self.default_heat_dict['alpha'])
+        self.Entry_list[0].insert(0, default.default_heat_dict['init'])
+        self.Entry_list[1].insert(0, default.default_heat_dict['nx'])
+        self.Entry_list[2].insert(0, default.default_heat_dict['x_max'])
+        self.Entry_list[3].insert(0, default.default_heat_dict['b_val'])
+        self.Entry_list[4].insert(0, default.default_heat_dict['nt'])
+        self.Entry_list[5].insert(0, default.default_heat_dict['t_max'])
+        self.Entry_list[6].insert(0, default.default_heat_dict['alpha'])
 
     def choose_gaussian(self):
         """
@@ -373,9 +334,9 @@ class Gui(tk.Tk):
                 self.Entry_list_Gaussian.append(self.myEntryGaussian)
         # Default values.
         if len(self.Entry_list_Gaussian[0].get()) == 0:
-            self.Entry_list_Gaussian[0].insert(0, self.default_init_condition['amplitude'])
-            self.Entry_list_Gaussian[1].insert(0, self.default_init_condition['phase/sigma'])
-            self.Entry_list_Gaussian[2].insert(0, self.default_init_condition['wave_vector/mu'])
+            self.Entry_list_Gaussian[0].insert(0, default.default_init_condition['amplitude'])
+            self.Entry_list_Gaussian[1].insert(0, default.default_init_condition['phase/sigma'])
+            self.Entry_list_Gaussian[2].insert(0, default.default_init_condition['wave_vector/mu'])
         self._create_enter_button()
 
     def choose_sin_sinc(self):
@@ -402,9 +363,9 @@ class Gui(tk.Tk):
                 self.Entry_list_Sin_Sinc.append(self.myEntrySinSinc)
         # Default values.
         if len(self.Entry_list_Sin_Sinc[0].get()) == 0:
-            self.Entry_list_Sin_Sinc[0].insert(0, self.default_init_condition['amplitude'])
-            self.Entry_list_Sin_Sinc[1].insert(0, self.default_init_condition['phase/sigma'])
-            self.Entry_list_Sin_Sinc[2].insert(0, self.default_init_condition['wave_vector/mu'])
+            self.Entry_list_Sin_Sinc[0].insert(0, default.default_init_condition['amplitude'])
+            self.Entry_list_Sin_Sinc[1].insert(0, default.default_init_condition['phase/sigma'])
+            self.Entry_list_Sin_Sinc[2].insert(0, default.default_init_condition['wave_vector/mu'])
         self._create_enter_button()
 
     def solve_clicked_when_heat_chosen(self):
@@ -420,24 +381,24 @@ class Gui(tk.Tk):
             alpha = float(self.Entry_label_dict["Alpha:"].get())
             b_val = float(self.Entry_label_dict["Boundary value at x0:"].get())
             init_val = float(self.Entry_label_dict["Initial condition:"].get())
-            assert (nt / max_t >= self.min_ratio_time_dif)
-            assert (self.nt_min_dif <= nt <= self.nt_max_dif)
-            assert (self.max_t_min_dif <= max_t)
-            assert (self.b_val_min <= b_val < self.b_val_max)
-            assert (self.alpha_min <= alpha <= self.alpha_max)
-            assert (self.min_ratio_dif <= nx / max_x <= self.max_ratio_dif)
-            assert (self.nx_min_dif <= nx <= self.nx_max_dif)
-            assert (self.init_val_min < init_val < b_val)
+            assert (nt / max_t >= default.min_ratio_time_dif)
+            assert (default.nt_min_dif <= nt <= default.nt_max_dif)
+            assert (default.max_t_min_dif <= max_t)
+            assert (default.b_val_min <= b_val < default.b_val_max)
+            assert (default.alpha_min <= alpha <= default.alpha_max)
+            assert (default.min_ratio_dif <= nx / max_x <= default.max_ratio_dif)
+            assert (default.nx_min_dif <= nx <= default.nx_max_dif)
+            assert (default.init_val_min < init_val < b_val)
             self.eq = diffusion_1d.Diffusion1D(max_x, nx, max_t, nt, alpha, b_val, init_val)
         except ValueError:
             self._error_message("Bad input in equation data. Please insert floats or integers.")
         except AssertionError:
             self._error_message(f'The values of initial condition, nx, boundary value at x0, Number cycles, '
-                                f'final time and Alpha must satisfy: ({self.nx_min_dif}, {self.nx_max_dif}), '
-                                f'({self.b_val_min}, {self.b_val_max}], ({self.nt_min_dif}, {self.nt_max_dif}), '
-                                f'>= {self.max_t_min_dif}, ({self.alpha_min}, {self.alpha_max}) respectively. '
-                                f'Also, nt/max_t >= {self.min_ratio_time_dif} and nx/max_x must to be inside the '
-                                f'range: ({self.min_ratio_dif}, {self.max_ratio_dif}).')
+                                f'final time and Alpha must satisfy: ({default.nx_min_dif}, {default.nx_max_dif}), '
+                                f'({default.b_val_min}, {default.b_val_max}], ({default.nt_min_dif}, {default.nt_max_dif}), '
+                                f'>= {default.max_t_min_dif}, ({default.alpha_min}, {default.alpha_max}) respectively. '
+                                f'Also, nt/max_t >= {default.min_ratio_time_dif} and nx/max_x must to be inside the '
+                                f'range: ({default.min_ratio_dif}, {default.max_ratio_dif}).')
 
     def solve_clicked_when_wave_chosen(self):
         """
@@ -451,68 +412,69 @@ class Gui(tk.Tk):
             nt = int(self.Entry_label_dict["Number cycles:"].get())
             max_t = float(self.Entry_label_dict["Final time:"].get())
             # Assertion conditions that necessary to get a reasonable solution.
-            assert (self.max_t_min < max_t and self.nt_min <= nt <= self.nt_max and nt / max_t < self.max_ratio)
+            assert (default.max_t_min < max_t and default.nt_min <= nt <= default.nt_max and nt / max_t <
+                    default.max_ratio)
         except ValueError:
             self._error_message('Bad input in data, Number cycles must be integer and Final time must be float'
                                 ' (or integer).')
             return None
         except AssertionError:
             self._error_message(f'The values of Final time and Number cycles must satisfy the conditions: '
-                                f'{self.max_t_min} < Final time, {self.nt_min} <= Number cycles <= {self.nt_max}'
-                                f' and Number cycles/Final time < {self.max_ratio}.')
+                                f'{default.max_t_min} < Final time, {default.nt_min} <= Number cycles <= {default.nt_max}'
+                                f' and Number cycles/Final time < {default.max_ratio}.')
             return None
         try:
             max_x = float(self.Entry_label_dict["x_max:"].get())
             nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
             # Assertion conditions that necessary to get a reasonable solution.
-            assert (self.max_x_min < max_x < nx / 2)
-            assert (self.nx_min < nx < self.nx_max)
+            assert (default.max_x_min < max_x < nx / 2)
+            assert (default.nx_min < nx < default.nx_max)
         except ValueError:
             self._error_message('Bad input in data, nx must be integer and x_max must be float (or integer).')
             return None
         except AssertionError:
-            self._error_message(f'The values of x_max and nx must to be between [{self.max_x_min}, {nx}/2], '
-                                f'[{self.nx_min}, {self.nx_max}], respectively.')
+            self._error_message(f'The values of x_max and nx must to be between [{default.max_x_min}, {nx}/2], '
+                                f'[{default.nx_min}, {default.nx_max}], respectively.')
             return None
         try:
             velocity = float(self.Entry_label_dict["Velocity:"].get())
             init_wave_form = self.Chosen_initial_condition_form
             # Euler's method stability condition.
-            assert (self.stability_wave_lower_bound < velocity*(max_t/max_x)*((nx+1)/(nt+1)) <=
-                    self.stability_wave_upper_bound)
+            assert (default.stability_wave_lower_bound < velocity*(max_t/max_x)*((nx+1)/(nt+1)) <=
+                    default.stability_wave_upper_bound)
             if init_wave_form == 'Gaussian':
                 amplitude = float(self.Amplitude_Gaussian)
                 wave_vector_sigma = float(self.Sigma)
                 phase_mu = float(self.Mu)
                 # Assertion conditions that necessary to get a reasonable solution.
                 assert (abs(phase_mu) <= abs(max_x))
-                assert (abs(wave_vector_sigma) <= self.wave_vector_sigma_max_gauss_wave)
+                assert (abs(wave_vector_sigma) <= default.wave_vector_sigma_max_gauss_wave)
                 assert (0 < amplitude != 0)
-                assert (self.velocity_min < velocity <= self.velocity_max)
+                assert (default.velocity_min < velocity <= default.velocity_max)
             if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
                 amplitude = float(self.Amplitude_Sin_Sinc)
                 wave_vector_sigma = float(self.Wave_vector)
                 phase_mu = float(self.Phase)
                 # Assertion conditions that necessary to get a reasonable solution.
-                assert (abs(wave_vector_sigma) <= self.wave_vector_sigma_max_sin_sinc_wave)
+                assert (abs(wave_vector_sigma) <= default.wave_vector_sigma_max_sin_sinc_wave)
                 assert (abs(phase_mu) < max_x)
                 assert (amplitude > 0)
-                assert (self.velocity_min < velocity <= self.velocity_max)
+                assert (default.velocity_min < velocity <= default.velocity_max)
         except ValueError:
             self._error_message("Bad input in equation data. Please insert floats or integers.")
             return None
         except AssertionError:
             if init_wave_form == 'Gaussian':
                 self._error_message(f'The values of Amplitude,sigma, Mu and Velocity must to be between !=0,'
-                                    f' (-{self.wave_vector_sigma_max_gauss_wave},'
-                                    f' {self.wave_vector_sigma_max_gauss_wave}), (-x_max, x_max),'
-                                    f' [{self.velocity_min}, {self.velocity_max}) respectively. Also, the known '
+                                    f' (-{default.wave_vector_sigma_max_gauss_wave},'
+                                    f' {default.wave_vector_sigma_max_gauss_wave}), (-x_max, x_max),'
+                                    f' [{default.velocity_min}, {default.velocity_max}) respectively. Also, the known '
                                     f'stability condition must be true.')
             if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
                 self._error_message(f'The values of Amplitude, Phase, Wave vector and Velocity must to be between'
-                                    f' > 0, [-x_max, x_max], (-{self.wave_vector_sigma_max_sin_sinc_wave},'
-                                    f'{self.wave_vector_sigma_max_sin_sinc_wave}), [{self.velocity_min},'
-                                    f'{self.velocity_max}) respectively. Also, the known stability condition must be'
+                                    f' > 0, [-x_max, x_max], (-{default.wave_vector_sigma_max_sin_sinc_wave},'
+                                    f'{default.wave_vector_sigma_max_sin_sinc_wave}), [{default.velocity_min},'
+                                    f'{default.velocity_max}) respectively. Also, the known stability condition must be'
                                     f' true')
                 return None
         self.eq = wave_1d.Wave1D(max_x, nx, max_t, nt, velocity, init_wave_form,
@@ -529,15 +491,17 @@ class Gui(tk.Tk):
         try:
             max_t = float(self.Entry_label_dict["Final time:"].get())
             nt = int(self.Entry_label_dict["Number cycles:"].get())
-            assert (self.max_t_min < max_t and self.nt_min <= nt <= self.nt_max and nt / max_t < self.max_ratio)
+            assert (default.max_t_min < max_t and default.nt_min <= nt <= default.nt_max and nt / max_t <
+                    default.max_ratio)
         except ValueError:
             self._error_message('Bad input in data, Number cycles must be integer and Final time must be float'
                                 ' (or integer).')
             return None
         except AssertionError:
             self._error_message(f'The values of Final time and Number cycles must satisfy the conditions: '
-                                f'{self.max_t_min} < Final time, {self.nt_min} <= Number cycles <= {self.nt_max} '
-                                f'and Number cycles/Final time < {self.max_ratio}')
+                                f'{default.max_t_min} < Final time, {default.nt_min} <= Number cycles <= '
+                                f'{default.nt_max} '
+                                f'and Number cycles/Final time < {default.max_ratio}')
             return None
         try:
             if self.Chosen_potential_type == '':
@@ -548,14 +512,14 @@ class Gui(tk.Tk):
             max_x = float(self.Entry_label_dict["x_max:"].get())
             nx = int(self.Entry_label_dict["Number of Cells (nx):"].get())
             # Assertion conditions that necessary to get a reasonable solution.
-            assert (self.max_x_min < max_x < nx / 2)
-            assert (self.nx_min < nx < self.nx_max)
+            assert (default.max_x_min < max_x < nx / 2)
+            assert (default.nx_min < nx < default.nx_max)
         except ValueError:
             self._error_message('Bad input in data, nx must be integer and x_max must be float (or integer).')
             return None
         except AssertionError:
-            self._error_message(f'The values of x_max and nx must to be between [{self.max_x_min}, {nx}/2], '
-                                f'[{self.nx_min}, {self.nx_max}], respectively.')
+            self._error_message(f'The values of x_max and nx must to be between [{default.max_x_min}, {nx}/2], '
+                                f'[{default.nx_min}, {default.nx_max}], respectively.')
             return None
         try:
             if init_wave_form == 'Gaussian':
@@ -563,17 +527,17 @@ class Gui(tk.Tk):
                 wave_vector_sigma = float(self.Sigma)
                 phase_mu = float(self.Mu)
                 # Assertion conditions that necessary to get a reasonable solution.
-                assert (abs(phase_mu) <= self.phase_mu_max)
-                assert (abs(wave_vector_sigma) <= self.wave_vector_sigma_max_gauss_sh)
-                assert (self.amplitude_min < amplitude <= self.amplitude_max)
+                assert (abs(phase_mu) <= default.phase_mu_max)
+                assert (abs(wave_vector_sigma) <= default.wave_vector_sigma_max_gauss_sh)
+                assert (default.amplitude_min < amplitude <= default.amplitude_max)
             if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
                 amplitude = float(self.Amplitude_Sin_Sinc)
                 wave_vector_sigma = float(self.Wave_vector)
                 phase_mu = float(self.Phase)
                 # Assertion conditions that necessary to get a reasonable solution.
-                assert (abs(wave_vector_sigma) <= self.wave_vector_sigma_max_sin_sinc_sh)
+                assert (abs(wave_vector_sigma) <= default.wave_vector_sigma_max_sin_sinc_sh)
                 assert (abs(phase_mu) < max_x)
-                assert (self.amplitude_min < amplitude <= self.amplitude_max)
+                assert (default.amplitude_min < amplitude <= default.amplitude_max)
             if self.Chosen_potential_type == 'harmonic potential':
                 potential_type = 'harmonic potential'
             if self.Chosen_potential_type == 'Gaussian potential':
@@ -583,15 +547,15 @@ class Gui(tk.Tk):
             return None
         except AssertionError:
             if init_wave_form == 'Gaussian':
-                self._error_message(f'The values of Amplitude,sigma and Mu must to be between [{self.amplitude_min}'
-                                    f',{self.amplitude_max}), (-{self.wave_vector_sigma_max_gauss_sh},'
-                                    f' {self.wave_vector_sigma_max_gauss_sh}), (-{self.phase_mu_max},'
-                                    f' {self.phase_mu_max}) respectively')
+                self._error_message(f'The values of Amplitude,sigma and Mu must to be between [{default.amplitude_min}'
+                                    f',{default.amplitude_max}), (-{default.wave_vector_sigma_max_gauss_sh},'
+                                    f' {default.wave_vector_sigma_max_gauss_sh}), (-{default.phase_mu_max},'
+                                    f' {default.phase_mu_max}) respectively')
             if init_wave_form == 'Sinc wave' or init_wave_form == 'Sine wave':
                 self._error_message(f'The values of Amplitude, Phase and Wave vector must to be between '
-                                    f'[{self.amplitude_min}, {self.amplitude_max}), [-x_max,x_max],'
-                                    f' (-{self.wave_vector_sigma_max_sin_sinc_sh},'
-                                    f' {self.wave_vector_sigma_max_sin_sinc_sh}) respectively')
+                                    f'[{default.amplitude_min}, {default.amplitude_max}), [-x_max,x_max],'
+                                    f' (-{default.wave_vector_sigma_max_sin_sinc_sh},'
+                                    f' {default.wave_vector_sigma_max_sin_sinc_sh}) respectively')
                 return None
         self.eq = schrodinger_1d.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, amplitude, wave_vector_sigma,
                                                phase_mu, potential_type)
