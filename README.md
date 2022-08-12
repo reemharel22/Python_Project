@@ -9,6 +9,7 @@ to the solution, choose the initial condition, etc.
 - matplotlib
 - scipy
 - tkinter
+- unittest
 # Run and use the project
 - Run main
 - Choose an equation from the options menu located under the title "Choose equation".
