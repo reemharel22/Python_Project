@@ -1,19 +1,12 @@
 import tkinter as tk
-from tkinter import ttk
-import default
 from tkinter import messagebox
-import numpy as np
-import matplotlib.pyplot as plt
-
 from matplotlib.figure import Figure
 import default as defaults
 import equation
 from matplotlib.backends.backend_tkagg import(
     FigureCanvasTkAgg,
-    FigureCanvasTk,
     NavigationToolbar2Tk
 )
-import matplotlib.animation as animation
 
 import matplotlib
 matplotlib.use('TkAgg')
@@ -22,15 +15,6 @@ class PlotBox(tk.Tk):
     """
     We don't care what equation is solved, just the fact that we have an equation and it has the plot function
     """
-    Entry_label_dict = []
-
-    Special_Entry_List = []
-
-    Equation_opts = ['Heat equation', 'Schrodinger equation',
-            'One way wave equation']
-
-    Initial_func = ['Gaussian', 'Sinc wave', 'Sine wave']
-
     def __init__(self, main_frame):
         self.main_frame = main_frame
         self.create_figure()

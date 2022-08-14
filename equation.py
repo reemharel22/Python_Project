@@ -1,13 +1,6 @@
 import numpy as np
-import scipy.sparse
-import scipy.linalg
-import scipy
-import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from matplotlib import style
-
-# style.use('ggplot')
 
 class Equation:
     """
@@ -44,9 +37,7 @@ class Equation:
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
         plt.xlim([0, self.x[-1]])
-        #plt.ylim([0, np.max(self.solutions[:, :])])
         self.ax.set_ylim((np.min(1.5*self.solutions[:, :]),np.max(1.5*self.solutions[:, :])))
-        #self.ax.set_xlim([0, self.x[-1]])
         self.ax.set_title(title)
         self.ax.grid()
 

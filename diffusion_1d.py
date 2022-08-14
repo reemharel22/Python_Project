@@ -2,6 +2,9 @@ from equation import Equation
 import numpy as np
 
 class Diffusion1D(Equation):
+    """
+    This class solves the one-dimensional Diffusion/heat equation.
+    """
     def __init__(self, max_x, nx, max_t, nt, alpha, b_val, init_val):
         # Representation of sparse matrix and right-hand side
         self.x = np.linspace(0, max_x, nx + 1)  # mesh points in grid

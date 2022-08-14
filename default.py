@@ -11,13 +11,6 @@ Diffusion_default = {
 subPAD = 2
 subPAD_out = 2
 
-# diff_max_x = 1.5
-# diff_nx = 50
-# diff_max_t = 2
-# diff_nt = 100
-# diff_alpha = 0.01
-# diff_b_val=90.0
-
 # Assertion checks Variables.
 max_t_min = 0
 nt_min = 30

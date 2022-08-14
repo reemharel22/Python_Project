@@ -433,7 +433,7 @@ class Gui(tk.Tk):
             self._error_message('Bad input in data, nx must be integer and x_max must be float (or integer).')
             return None
         except AssertionError:
-            self._error_message(f'The values of x_max and nx must to be between [{default.max_x_min}, {nx}/2], '
+            self._error_message(f'The values of x_max and nx must to be between [{default.max_x_min}, nx/2], '
                                 f'[{default.nx_min}, {default.nx_max}], respectively.')
             return None
         try:
@@ -475,7 +475,7 @@ class Gui(tk.Tk):
                                     f' > 0, [-x_max, x_max], (-{default.wave_vector_sigma_max_sin_sinc_wave},'
                                     f'{default.wave_vector_sigma_max_sin_sinc_wave}), [{default.velocity_min},'
                                     f'{default.velocity_max}) respectively. Also, the known stability condition must be'
-                                    f' true')
+                                    f' true.')
                 return None
         self.eq = wave_1d.Wave1D(max_x, nx, max_t, nt, velocity, init_wave_form,
                                  amplitude, wave_vector_sigma, phase_mu)
@@ -518,7 +518,7 @@ class Gui(tk.Tk):
             self._error_message('Bad input in data, nx must be integer and x_max must be float (or integer).')
             return None
         except AssertionError:
-            self._error_message(f'The values of x_max and nx must to be between [{default.max_x_min}, {nx}/2], '
+            self._error_message(f'The values of x_max and nx must to be between [{default.max_x_min}, nx/2], '
                                 f'[{default.nx_min}, {default.nx_max}], respectively.')
             return None
         try:
@@ -555,7 +555,7 @@ class Gui(tk.Tk):
                 self._error_message(f'The values of Amplitude, Phase and Wave vector must to be between '
                                     f'[{default.amplitude_min}, {default.amplitude_max}), [-x_max,x_max],'
                                     f' (-{default.wave_vector_sigma_max_sin_sinc_sh},'
-                                    f' {default.wave_vector_sigma_max_sin_sinc_sh}) respectively')
+                                    f' {default.wave_vector_sigma_max_sin_sinc_sh}) respectively.')
                 return None
         self.eq = schrodinger_1d.schrodinger1D(max_x, nx, max_t, nt, init_wave_form, amplitude, wave_vector_sigma,
                                                phase_mu, potential_type)
