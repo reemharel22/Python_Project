@@ -34,6 +34,7 @@ class Equation:
         pass
 
     def set_plot_title_labels(self, xlabel, ylabel, title):
+        # Set the axis labels and size of the plot.
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
         plt.xlim([0, self.x[-1]])
@@ -41,8 +42,8 @@ class Equation:
         self.ax.set_title(title)
         self.ax.grid()
 
-    # it is common for all 1d equations to do this..
     def plot_animation(self, fig, xlabel='Position', ylabel='flux', title='Heat flux vs position'):
+        # Animation function, it is common for all 1d equations to do this.
         self.fig = fig
         self.ax = self.fig.add_subplot(111)
         self.set_plot_title_labels(xlabel, ylabel, title)

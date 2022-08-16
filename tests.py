@@ -44,7 +44,7 @@ class TestSchrodinger1d(unittest.TestCase):
         sum_of_prob = self.schrodinger_test.A**2*integrate.quad(prob_dis, -default.default_Schrodinger_dict['x_max'],
                                                                 default.default_Schrodinger_dict['x_max'])[0]
         second = 1
-        places = 10
+        places = 1
         msg = 'Schrodinger is not normalized at the beginning!'
         self.assertAlmostEqual(sum_of_prob, second, places, msg,  delta=None)
         print('Schrodinger normalization at the beginning is correct!')
@@ -59,7 +59,7 @@ class TestSchrodinger1d(unittest.TestCase):
         self.schrodinger_test.solve()
         first = np.trapz(y=self.schrodinger_test.solutions[-1], x=self.schrodinger_test.x)
         second = 1
-        places = 1
+        places = 10
         msg = 'Schrodinger is not normalized!'
         self.assertAlmostEqual(first, second, places, msg, delta=None)
         print('Schrodinger normalization at the end is correct!')
